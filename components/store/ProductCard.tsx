@@ -65,7 +65,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
         {/* Top Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.isNewDrop && (
-            <span className="inline-flex items-center gap-1 bg-[#d4ff00] text-black font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md">
+            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md">
               <Zap className="w-3 h-3" /> New Drop
             </span>
           )}
@@ -115,7 +115,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
                     className={`flex-1 min-w-[28px] py-1 text-center text-xs font-mono font-bold rounded transition ${
                       outOfStock
                         ? "line-through opacity-30 text-zinc-400 dark:text-zinc-600 cursor-not-allowed bg-zinc-100 dark:bg-zinc-900"
-                        : "bg-zinc-100 dark:bg-zinc-800 hover:bg-[#d4ff00] hover:text-black text-zinc-900 dark:text-white"
+                        : "bg-zinc-100 dark:bg-zinc-800 hover:bg-[#00a3ff] hover:text-black text-zinc-900 dark:text-white"
                     }`}
                   >
                     {s.size}
@@ -137,7 +137,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
             </span>
           </div>
 
-          <Link href={`/product/${product.slug}`} className="block group-hover:text-[#7ba000] dark:group-hover:text-[#d4ff00] transition">
+          <Link href={`/product/${product.slug}`} className="block group-hover:text-[#0066ff] dark:group-hover:text-[#00a3ff] transition">
             <h3 className="font-bold text-sm text-zinc-950 dark:text-zinc-100 line-clamp-1">
               {product.title}
             </h3>

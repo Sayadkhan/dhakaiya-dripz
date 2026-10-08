@@ -106,7 +106,7 @@ export default function ShopCatalogClient() {
                 onClick={() => updateQuery("category", cat)}
                 className={`text-xs font-bold px-3.5 py-1.5 rounded-full border transition whitespace-nowrap ${
                   selectedCategory.toLowerCase() === cat.toLowerCase()
-                    ? "bg-[#d4ff00] text-black border-[#d4ff00] shadow-xs font-black"
+                    ? "bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white border-[#00a3ff] shadow-xs font-black"
                     : "bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700"
                 }`}
               >
@@ -120,7 +120,7 @@ export default function ShopCatalogClient() {
             onClick={() => setIsMobileFilterOpen(true)}
             className="lg:hidden flex items-center gap-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-xs font-bold px-4 py-2 rounded-xl"
           >
-            <SlidersHorizontal className="w-4 h-4 text-black dark:text-[#d4ff00]" />
+            <SlidersHorizontal className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" />
             <span>Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}</span>
           </button>
 
@@ -130,7 +130,7 @@ export default function ShopCatalogClient() {
             <select
               value={sortBy}
               onChange={(e) => updateQuery("sort", e.target.value)}
-              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 text-xs font-bold py-1.5 px-3 rounded-xl focus:outline-none focus:border-black dark:focus:border-[#d4ff00]"
+              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 text-xs font-bold py-1.5 px-3 rounded-xl focus:outline-none focus:border-black dark:focus:border-[#00a3ff]"
             >
               <option value="featured">Sort: Featured</option>
               <option value="price-asc">Price: Low to High</option>
@@ -265,17 +265,23 @@ export default function ShopCatalogClient() {
             <Filter className="w-6 h-6" />
           </div>
           <div>
-            <h3 className="text-lg font-bold text-zinc-950 dark:text-white">No products found</h3>
+            <h3 className="text-lg font-bold text-zinc-950 dark:text-white">
+              {products.length === 0 ? "Catalog In Preparation" : "No products found"}
+            </h3>
             <p className="text-xs text-zinc-500 mt-1 max-w-sm mx-auto">
-              We couldn&apos;t find any items matching your selected filter parameters. Try clearing some filters.
+              {products.length === 0
+                ? "The upcoming drop is currently in assembly. New collection drops will appear here shortly."
+                : "We couldn't find any items matching your selected filter parameters. Try clearing some filters."}
             </p>
           </div>
-          <button
-            onClick={clearAllFilters}
-            className="bg-[#d4ff00] text-black font-extrabold text-xs uppercase px-5 py-2.5 rounded-full hover:bg-[#b8dd00] transition"
-          >
-            Reset All Filters
-          </button>
+          {products.length > 0 && (
+            <button
+              onClick={clearAllFilters}
+              className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-extrabold text-xs uppercase px-5 py-2.5 rounded-full shadow-lg shadow-[#0088ff]/25 transition"
+            >
+              Reset All Filters
+            </button>
+          )}
         </div>
       )}
 
@@ -303,7 +309,7 @@ export default function ShopCatalogClient() {
                     }}
                     className={`text-left text-xs py-2 px-3 rounded-lg font-semibold ${
                       selectedCategory.toLowerCase() === cat.toLowerCase()
-                        ? "bg-[#d4ff00] text-black"
+                        ? "bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white"
                         : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
                     }`}
                   >
@@ -394,7 +400,7 @@ export default function ShopCatalogClient() {
               </button>
               <button
                 onClick={() => setIsMobileFilterOpen(false)}
-                className="w-full bg-[#d4ff00] text-black font-black text-xs uppercase py-3 rounded-xl"
+                className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-xs uppercase py-3 rounded-xl shadow-lg shadow-[#0088ff]/25 transition"
               >
                 Apply Filters
               </button>

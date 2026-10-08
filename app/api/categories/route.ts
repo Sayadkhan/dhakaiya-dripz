@@ -11,7 +11,11 @@ export async function GET() {
       },
       orderBy: { name: "asc" },
     });
-    return NextResponse.json({ success: true, categories });
+    const formatted = categories.map((cat) => ({
+      ...cat,
+      image: cat.imageUrl || undefined,
+    }));
+    return NextResponse.json({ success: true, categories: formatted });
   } catch (error) {
     console.error("Fetch categories error:", error);
     return NextResponse.json({ success: false, error: "Database error" }, { status: 500 });
@@ -21,25 +25,34 @@ export async function GET() {
 export async function POST(request: NextRequest) {
   try {
     const body = await request.json();
-    const { name, slug, description } = body;
+    const { name, slug, description, image, imageUrl } = body;
 
     if (!name) {
       return NextResponse.json({ error: "Category name is required" }, { status: 400 });
     }
 
     const cleanSlug = slug || name.trim().toLowerCase().replace(/\s+/g, "-");
+    const finalImage = image !== undefined ? image : imageUrl;
 
     const category = await prisma.category.upsert({
       where: { slug: cleanSlug },
-      update: { name, description },
+      update: {
+        name,
+        description,
+        ...(finalImage !== undefined ? { imageUrl: finalImage } : {}),
+      },
       create: {
         name,
         slug: cleanSlug,
         description,
+        imageUrl: finalImage || null,
       },
     });
 
-    return NextResponse.json({ success: true, category });
+    return NextResponse.json({
+      success: true,
+      category: { ...category, image: category.imageUrl || undefined },
+    });
   } catch (error) {
     console.error("Create category error:", error);
     return NextResponse.json({ success: false, error: "Failed to create category" }, { status: 500 });

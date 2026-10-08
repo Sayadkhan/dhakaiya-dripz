@@ -1,4 +1,18 @@
 {
-  "logoUrl": "https://raw.githubusercontent.com/shadcn.png",
-  "updatedAt": "2026-09-29T03:07:03.726Z"
+  "logoUrl": "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png",
+  "deliveryInsideDhaka": 80,
+  "deliveryOutsideDhaka": 150,
+  "freeShippingThreshold": 3000,
+  "socialLinks": {
+    "facebook": "https://facebook.com",
+    "instagram": "https://instagram.com",
+    "tiktok": "https://tiktok.com",
+    "whatsapp": "https://wa.me/8801799445851",
+    "youtube": "",
+    "twitter": ""
+  },
+  "phone": "+880 1799-445851",
+  "email": "support@dhakaiyadripz.com",
+  "address": "Gulshan 1 / Banani Hub, Dhaka, Bangladesh",
+  "updatedAt": "2026-10-08T02:30:00.000Z"
 }

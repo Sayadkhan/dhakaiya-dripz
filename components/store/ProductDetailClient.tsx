@@ -125,7 +125,7 @@ export default function ProductDetailClient({
                 onClick={() => setActiveMedia("catwalk")}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition ${
                   activeMedia === "catwalk"
-                    ? "bg-[#d4ff00] text-black shadow-xs font-black"
+                    ? "bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white shadow-xs font-black"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                 }`}
               >
@@ -160,7 +160,7 @@ export default function ProductDetailClient({
             {/* Float Badges */}
             <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
               {product.isNewDrop && (
-                <span className="bg-[#d4ff00] text-black font-black text-xs uppercase tracking-wider px-3 py-1 rounded-full shadow-lg">
+                <span className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-black text-xs uppercase tracking-wider px-3 py-1 rounded-full shadow-lg">
                   New Drop
                 </span>
               )}
@@ -194,7 +194,7 @@ export default function ProductDetailClient({
                   onClick={() => setSelectedImageIndex(idx)}
                   className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition ${
                     selectedImageIndex === idx
-                      ? "border-black dark:border-[#d4ff00] ring-2 ring-black/10 dark:ring-[#d4ff00]/20"
+                      ? "border-black dark:border-[#00a3ff] ring-2 ring-black/10 dark:ring-[#00a3ff]/20"
                       : "border-zinc-200 dark:border-zinc-800 opacity-70 hover:opacity-100"
                   }`}
                 >
@@ -218,7 +218,7 @@ export default function ProductDetailClient({
             {/* Header / Titles */}
             <div className="space-y-2 border-b border-zinc-200 dark:border-zinc-900 pb-5">
               <div className="flex items-center gap-2 text-xs">
-                <span className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-[#d4ff00] font-mono font-bold px-2 py-0.5 rounded uppercase">
+                <span className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-[#00a3ff] font-mono font-bold px-2 py-0.5 rounded uppercase">
                   {product.category}
                 </span>
                 <span className="text-zinc-400 font-mono">•</span>
@@ -263,7 +263,7 @@ export default function ProductDetailClient({
                     onClick={() => setSelectedColor(color.name)}
                     className={`group flex items-center gap-2 p-1.5 rounded-xl border transition ${
                       selectedColor === color.name
-                        ? "border-black dark:border-[#d4ff00] bg-zinc-100 dark:bg-zinc-900 shadow-xs"
+                        ? "border-black dark:border-[#00a3ff] bg-zinc-100 dark:bg-zinc-900 shadow-xs"
                         : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-700"
                     }`}
                   >
@@ -287,7 +287,7 @@ export default function ProductDetailClient({
                 </span>
                 <button
                   onClick={() => setIsSizeGuideOpen(true)}
-                  className="text-xs font-bold text-zinc-900 dark:text-[#d4ff00] hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-zinc-900 dark:text-[#00a3ff] hover:underline flex items-center gap-1"
                 >
                   <Ruler className="w-3.5 h-3.5" /> Size Chart
                 </button>
@@ -305,7 +305,7 @@ export default function ProductDetailClient({
                       onClick={() => setSelectedSize(s.size)}
                       className={`relative py-3 rounded-xl font-mono text-xs font-bold transition flex flex-col items-center justify-center border ${
                         isSelected
-                          ? "border-[#d4ff00] bg-[#d4ff00] text-black shadow-lg shadow-[#d4ff00]/15"
+                          ? "border-[#00a3ff] bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white shadow-lg shadow-[#0088ff]/25"
                           : outOfStock
                           ? "border-zinc-200 dark:border-zinc-900 bg-zinc-50 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-600 line-through opacity-40 cursor-not-allowed"
                           : "border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 hover:border-zinc-400 dark:hover:border-zinc-600 text-zinc-900 dark:text-zinc-200"
@@ -315,7 +315,7 @@ export default function ProductDetailClient({
                       {outOfStock ? (
                         <span className="text-[9px] uppercase font-sans mt-0.5">Sold</span>
                       ) : s.stock <= 2 ? (
-                        <span className={`text-[9px] font-sans mt-0.5 ${isSelected ? "text-black" : "text-amber-600 dark:text-amber-400"}`}>
+                        <span className={`text-[9px] font-sans mt-0.5 ${isSelected ? "text-white" : "text-amber-600 dark:text-amber-400"}`}>
                           {s.stock} left
                         </span>
                       ) : null}
@@ -338,7 +338,7 @@ export default function ProductDetailClient({
               <button
                 onClick={handleAddToBag}
                 disabled={isOutOfStock}
-                className="w-full bg-[#d4ff00] hover:bg-[#c3ec00] disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 dark:disabled:text-zinc-600 text-black font-black text-sm uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 shadow-xl shadow-[#d4ff00]/20 transition group"
+                className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 dark:disabled:text-zinc-600 text-white font-black text-sm uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 shadow-xl shadow-[#0088ff]/25 transition group"
               >
                 <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition" />
                 <span>{isOutOfStock ? "Out of Stock" : "Add to Bag (Slide Drawer)"}</span>
@@ -357,19 +357,19 @@ export default function ProductDetailClient({
             {/* Assurances & Shipping Info */}
             <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-900 space-y-3 text-xs text-zinc-600 dark:text-zinc-400">
               <div className="flex items-center gap-3">
-                <Truck className="w-4 h-4 text-black dark:text-[#d4ff00] flex-shrink-0" />
+                <Truck className="w-4 h-4 text-[#0088ff] dark:text-[#00a3ff] flex-shrink-0" />
                 <div>
                   <strong className="text-zinc-950 dark:text-white">Nationwide COD Shipping:</strong> Inside Dhaka (24-48h, ৳80), Outside Dhaka (48-72h, ৳150).
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <ShieldCheck className="w-4 h-4 text-black dark:text-[#d4ff00] flex-shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-[#0088ff] dark:text-[#00a3ff] flex-shrink-0" />
                 <div>
                   <strong className="text-zinc-950 dark:text-white">Pay on Delivery:</strong> Inspect the parcel at your doorstep before handing over cash.
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <RotateCcw className="w-4 h-4 text-black dark:text-[#d4ff00] flex-shrink-0" />
+                <RotateCcw className="w-4 h-4 text-[#0088ff] dark:text-[#00a3ff] flex-shrink-0" />
                 <div>
                   <strong className="text-zinc-950 dark:text-white">7-Day Replacement:</strong> Effortless size exchange if it doesn&apos;t match your drape.
                 </div>
@@ -384,7 +384,7 @@ export default function ProductDetailClient({
               <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
                 {product.details.map((detail, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <Check className="w-3.5 h-3.5 text-black dark:text-[#d4ff00] mt-0.5 flex-shrink-0" />
+                    <Check className="w-3.5 h-3.5 text-[#0088ff] dark:text-[#00a3ff] mt-0.5 flex-shrink-0" />
                     <span>{detail}</span>
                   </li>
                 ))}

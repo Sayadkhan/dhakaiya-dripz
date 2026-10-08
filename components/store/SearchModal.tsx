@@ -95,7 +95,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           {query.trim() === "" ? (
             <div className="space-y-4 py-2">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                <Sparkles className="w-3.5 h-3.5 text-[#85aa00] dark:text-[#d4ff00]" /> Popular Searches
+                <Sparkles className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" /> Popular Searches
               </div>
               <div className="flex flex-wrap gap-2">
                 {[
@@ -137,7 +137,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-black dark:group-hover:text-[#d4ff00] transition truncate">
+                    <div className="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-[#0066ff] dark:group-hover:text-[#00a3ff] transition truncate">
                       {product.title}
                     </div>
                     <div className="text-xs text-zinc-500 flex items-center gap-2 mt-0.5">
@@ -148,7 +148,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       </span>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-black dark:group-hover:text-[#d4ff00] group-hover:translate-x-1 transition" />
+                  <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-[#0066ff] dark:group-hover:text-[#00a3ff] group-hover:translate-x-1 transition" />
                 </Link>
               ))}
             </div>

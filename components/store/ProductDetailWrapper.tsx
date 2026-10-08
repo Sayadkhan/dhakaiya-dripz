@@ -5,15 +5,12 @@ import Link from "next/link";
 import { ArrowLeft, ShoppingBag } from "lucide-react";
 import { useProducts } from "@/context/ProductContext";
 import ProductDetailClient from "./ProductDetailClient";
-import { INITIAL_PRODUCTS } from "@/lib/mock-data";
 
 export default function ProductDetailWrapper({ slug }: { slug: string }) {
   const { products, isLoaded } = useProducts();
 
-  // Once loaded, search strictly in products state so deleted products are not resurrected
-  const product = isLoaded
-    ? products.find((p) => p.slug === slug)
-    : products.find((p) => p.slug === slug) || INITIAL_PRODUCTS.find((p) => p.slug === slug);
+  // Search strictly in dynamic products
+  const product = products.find((p) => p.slug === slug);
 
   // While localStorage is loading, display a graceful skeleton loader
   if (!product && !isLoaded) {
@@ -39,7 +36,7 @@ export default function ProductDetailWrapper({ slug }: { slug: string }) {
         <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center mb-4 shadow-sm">
           <ShoppingBag className="w-8 h-8 text-zinc-400" />
         </div>
-        <span className="font-mono text-xs uppercase tracking-widest text-[#7ba000] dark:text-[#d4ff00] font-bold mb-2">
+        <span className="font-mono text-xs uppercase tracking-widest text-[#0066ff] dark:text-[#00a3ff] font-bold mb-2">
           Piece Unavailable
         </span>
         <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-zinc-950 dark:text-white mb-3">
@@ -50,7 +47,7 @@ export default function ProductDetailWrapper({ slug }: { slug: string }) {
         </p>
         <Link
           href="/shop"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black dark:bg-[#d4ff00] text-white dark:text-black font-black text-xs uppercase tracking-wider hover:opacity-90 transition shadow-lg"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-xs uppercase tracking-wider transition shadow-lg shadow-[#0088ff]/25"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Explore All Drops</span>

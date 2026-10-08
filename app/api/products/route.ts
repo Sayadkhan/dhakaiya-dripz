@@ -1,23 +1,83 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { readFile, writeFile, mkdir } from "fs/promises";
+import path from "path";
+import { ProductItem } from "@/lib/mock-data";
+
+const PRODUCTS_FILE_PATH = path.join(process.cwd(), "data", "store_products.json");
+const BACKUP_PRODUCTS_FILE_PATH = path.join(process.cwd(), "public", "uploads", "store_products.json");
+
+async function readProductsFromFile(): Promise<ProductItem[]> {
+  try {
+    const data = await readFile(PRODUCTS_FILE_PATH, "utf-8");
+    return JSON.parse(data);
+  } catch {
+    try {
+      const data = await readFile(BACKUP_PRODUCTS_FILE_PATH, "utf-8");
+      return JSON.parse(data);
+    } catch {
+      return [];
+    }
+  }
+}
+
+async function writeProductsToFile(products: ProductItem[]): Promise<void> {
+  const dataDir = path.dirname(PRODUCTS_FILE_PATH);
+  await mkdir(dataDir, { recursive: true });
+  await writeFile(PRODUCTS_FILE_PATH, JSON.stringify(products, null, 2), "utf-8");
+
+  try {
+    const backupDir = path.dirname(BACKUP_PRODUCTS_FILE_PATH);
+    await mkdir(backupDir, { recursive: true });
+    await writeFile(BACKUP_PRODUCTS_FILE_PATH, JSON.stringify(products, null, 2), "utf-8");
+  } catch {}
+}
 
 export async function GET() {
   try {
-    const dbProducts = await prisma.product.findMany({
-      include: {
-        category: true,
-        media: {
-          orderBy: { displayOrder: "asc" },
-        },
-        variants: true,
-      },
-      orderBy: { createdAt: "desc" },
-    });
-
-    return NextResponse.json({ success: true, products: dbProducts });
+    const products = await readProductsFromFile();
+    return NextResponse.json({ success: true, products });
   } catch (error) {
     console.error("Failed to fetch products:", error);
-    return NextResponse.json({ success: false, error: "Database error" }, { status: 500 });
+    return NextResponse.json({ success: true, products: [] });
+  }
+}
+
+export async function POST(request: NextRequest) {
+  try {
+    const product: ProductItem = await request.json();
+    if (!product || !product.id || !product.title) {
+      return NextResponse.json({ success: false, error: "Invalid product data" }, { status: 400 });
+    }
+
+    const products = await readProductsFromFile();
+    const filtered = products.filter((p) => p.id !== product.id && p.slug !== product.slug);
+    const updated = [product, ...filtered];
+
+    await writeProductsToFile(updated);
+
+    return NextResponse.json({ success: true, product });
+  } catch (error) {
+    console.error("Failed to save product:", error);
+    return NextResponse.json({ success: false, error: "Failed to save product" }, { status: 500 });
+  }
+}
+
+export async function PUT(request: NextRequest) {
+  try {
+    const product: ProductItem = await request.json();
+    if (!product || !product.id) {
+      return NextResponse.json({ success: false, error: "Invalid product data" }, { status: 400 });
+    }
+
+    const products = await readProductsFromFile();
+    const updated = products.map((p) => (p.id === product.id ? product : p));
+
+    await writeProductsToFile(updated);
+
+    return NextResponse.json({ success: true, product });
+  } catch (error) {
+    console.error("Failed to update product:", error);
+    return NextResponse.json({ success: false, error: "Failed to update product" }, { status: 500 });
   }
 }
 
@@ -31,23 +91,17 @@ export async function DELETE(request: NextRequest) {
       return NextResponse.json({ error: "Missing product id or slug" }, { status: 400 });
     }
 
-    // Delete matching products in PostgreSQL database
-    const deleteResult = await prisma.product.deleteMany({
-      where: {
-        OR: [
-          ...(id ? [{ id }] : []),
-          ...(slug ? [{ slug }] : []),
-        ],
-      },
-    });
+    const products = await readProductsFromFile();
+    const updated = products.filter((p) => p.id !== id && p.slug !== slug);
+
+    await writeProductsToFile(updated);
 
     return NextResponse.json({
       success: true,
-      deletedCount: deleteResult.count,
+      deletedCount: products.length - updated.length,
     });
   } catch (error) {
     console.error("Delete product error:", error);
-    // Even if db delete fails or item didn't exist in DB, return clean response
-    return NextResponse.json({ success: false, error: "Failed to delete from DB" }, { status: 500 });
+    return NextResponse.json({ success: false, error: "Failed to delete product" }, { status: 500 });
   }
 }

@@ -37,19 +37,17 @@ export default function Navbar() {
       <div className="bg-zinc-950 text-zinc-300 text-xs py-2 px-4 border-b border-zinc-800">
         <div className="max-w-7xl mx-auto flex items-center justify-between">
           <div className="flex items-center space-x-2 overflow-hidden">
-            <span className="inline-flex items-center gap-1 bg-[#d4ff00] text-black font-extrabold text-[10px] px-1.5 py-0.5 rounded uppercase tracking-wider">
+            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[10px] px-2 py-0.5 rounded-full uppercase tracking-wider shadow-xs">
               <Zap className="w-3 h-3" /> Flash Drop
             </span>
             <span className="truncate text-xs font-medium">
               Free Delivery Across Bangladesh on Orders Over ৳3,000 | Next-Day Dhaka Shipping ⚡
             </span>
           </div>
-          <div className="hidden md:flex items-center gap-4 text-xs font-medium text-zinc-400">
-            <Link href="/admin" className="hover:text-[#d4ff00] transition flex items-center gap-1">
-              <ShieldCheck className="w-3.5 h-3.5 text-[#d4ff00]" /> Admin Portal
-            </Link>
-            <span className="text-zinc-600">|</span>
-            <span className="hover:text-white cursor-pointer transition">Cash on Delivery (COD)</span>
+          <div className="hidden md:flex items-center gap-3 text-xs font-medium text-zinc-400">
+            <span className="text-zinc-300">Cash on Delivery (COD)</span>
+            <span className="text-zinc-600">•</span>
+            <span>Nationwide Bangladesh Shipping</span>
           </div>
         </div>
       </div>
@@ -73,18 +71,18 @@ export default function Navbar() {
                 {isMobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
               </button>
 
-              {/* Brand Logo */}
-              <Link href="/" className="inline-flex items-center group shrink-0">
+              {/* Brand Logo - Crisp, Prominent & High-Legibility */}
+              <Link href="/" className="inline-flex items-center group shrink-0 py-1">
                 {customLogoUrl && !logoLoadError ? (
                   <img
                     src={customLogoUrl}
                     alt="Dhakaiya Dripz Logo"
                     onError={() => setLogoLoadError(true)}
-                    className="h-8 sm:h-10 lg:h-11 w-auto max-w-[150px] sm:max-w-[200px] object-contain group-hover:opacity-90 transition"
+                    className="h-10 sm:h-12 lg:h-14 w-auto max-w-[170px] sm:max-w-[230px] object-contain drop-shadow-[0_2px_12px_rgba(0,163,255,0.3)] group-hover:scale-102 transition duration-200"
                   />
                 ) : (
                   <span className="font-black text-xl sm:text-2xl lg:text-3xl tracking-tighter text-white uppercase group-hover:opacity-90 transition">
-                    DHAKAIYA<span className="text-[#d4ff00]">DRIPZ</span>
+                    DHAKAIYA<span className="bg-gradient-to-r from-[#0088ff] to-[#00d2ff] bg-clip-text text-transparent">DRIPZ</span>
                   </span>
                 )}
               </Link>
@@ -136,16 +134,6 @@ export default function Navbar() {
               {/* Theme Toggle (Light / Dark) */}
               <ThemeToggle />
 
-              {/* Account / Admin Portal */}
-              <Link
-                href="/admin"
-                className="p-2 text-zinc-300 hover:text-white hover:bg-zinc-800/60 rounded-full transition hidden sm:inline-flex"
-                title="Admin Dashboard & Account"
-                aria-label="Account"
-              >
-                <User className="w-5 h-5 sm:w-6 sm:h-6" />
-              </Link>
-
               {/* Wishlist Heart Icon with Badge */}
               <Link
                 href="/wishlist"
@@ -168,9 +156,9 @@ export default function Navbar() {
                 aria-label="Open Cart Drawer"
                 title="Shopping Bag"
               >
-                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 group-hover:text-[#d4ff00] transition" />
+                <ShoppingBag className="w-5 h-5 sm:w-6 sm:h-6 group-hover:text-[#00a3ff] transition" />
                 {totalItems > 0 && (
-                  <span className="absolute -top-1 -right-1 bg-[#d4ff00] text-black font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center">
+                  <span className="absolute -top-1 -right-1 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[10px] w-4 h-4 rounded-full flex items-center justify-center shadow-xs">
                     {totalItems}
                   </span>
                 )}
@@ -188,9 +176,9 @@ export default function Navbar() {
               
               <Link
                 href="/shop?filter=new"
-                className="hover:text-[#d4ff00] transition flex items-center gap-1.5 shrink-0 font-bold"
+                className="hover:text-[#00a3ff] transition flex items-center gap-1.5 shrink-0 font-bold"
               >
-                <span className="w-2 h-2 rounded-full bg-[#d4ff00] animate-pulse" />
+                <span className="w-2 h-2 rounded-full bg-[#00a3ff] animate-pulse" />
                 <span>New in</span>
               </Link>
 
@@ -247,10 +235,10 @@ export default function Navbar() {
               <Link
                 href="/shop?filter=new"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="px-3 py-2 text-sm font-semibold text-[#d4ff00] hover:bg-zinc-900 rounded-lg flex items-center justify-between"
+                className="px-3 py-2 text-sm font-semibold text-[#00a3ff] hover:bg-zinc-900 rounded-lg flex items-center justify-between"
               >
                 <span>New in Drops</span>
-                <ArrowRight className="w-4 h-4 text-[#d4ff00]" />
+                <ArrowRight className="w-4 h-4 text-[#00a3ff]" />
               </Link>
 
               {categories.map((cat) => (
@@ -260,20 +248,20 @@ export default function Navbar() {
                   onClick={() => setIsMobileMenuOpen(false)}
                   className="px-3 py-2 text-sm font-semibold text-zinc-200 hover:text-white hover:bg-zinc-900 rounded-lg flex items-center justify-between"
                 >
-                  <span>{cat.name}</span>
+                  <div className="flex items-center gap-2.5">
+                    {cat.image ? (
+                      <img
+                        src={cat.image}
+                        alt={cat.name}
+                        className="w-6 h-6 rounded-md object-cover border border-zinc-800"
+                      />
+                    ) : null}
+                    <span>{cat.name}</span>
+                  </div>
                   <ArrowRight className="w-4 h-4 text-zinc-600" />
                 </Link>
               ))}
 
-              <div className="pt-3 border-t border-zinc-800">
-                <Link
-                  href="/admin"
-                  onClick={() => setIsMobileMenuOpen(false)}
-                  className="px-3 py-2 text-sm font-semibold text-[#d4ff00] hover:bg-zinc-900 rounded-lg flex items-center gap-2"
-                >
-                  <ShieldCheck className="w-4 h-4 text-[#d4ff00]" /> Admin Portal
-                </Link>
-              </div>
             </div>
           </div>
         )}

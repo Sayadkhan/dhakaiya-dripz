@@ -7,14 +7,15 @@ import Navbar from "@/components/store/Navbar";
 import Footer from "@/components/store/Footer";
 import ProductCard from "@/components/store/ProductCard";
 import { useWishlist } from "@/context/WishlistContext";
-import { INITIAL_PRODUCTS } from "@/lib/mock-data";
+import { useProducts } from "@/context/ProductContext";
 
 export default function WishlistPage() {
   const { wishlistIds } = useWishlist();
-  const wishlistedProducts = INITIAL_PRODUCTS.filter((p) => wishlistIds.includes(p.id));
+  const { products } = useProducts();
+  const wishlistedProducts = products.filter((p) => wishlistIds.includes(p.id));
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#d4ff00] selection:text-black transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#0088ff] selection:text-white transition-colors duration-200">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 w-full">
@@ -53,7 +54,7 @@ export default function WishlistPage() {
             </div>
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 bg-[#d4ff00] text-black font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-full hover:bg-[#b8dd00] transition shadow-xs"
+              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-full hover:from-[#0052cc] hover:to-[#0088ff] transition shadow-md shadow-[#0066ff]/20"
             >
               <span>Discover New Drops</span>
               <ArrowRight className="w-4 h-4" />

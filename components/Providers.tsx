@@ -6,6 +6,7 @@ import { ProductProvider } from "@/context/ProductContext";
 import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import CartDrawer from "@/components/store/CartDrawer";
+import FloatingActionWidgets from "@/components/store/FloatingActionWidgets";
 
 export default function Providers({ children }: { children: React.ReactNode }) {
   return (
@@ -15,6 +16,7 @@ export default function Providers({ children }: { children: React.ReactNode }) {
           <CartProvider>
             {children}
             <CartDrawer />
+            <FloatingActionWidgets />
           </CartProvider>
         </WishlistProvider>
       </ProductProvider>

@@ -20,7 +20,10 @@ export function WishlistProvider({ children }: { children: React.ReactNode }) {
     try {
       const saved = localStorage.getItem("dhakaiya_wishlist");
       if (saved) {
-        setWishlistIds(JSON.parse(saved));
+        const parsed: string[] = JSON.parse(saved);
+        const cleanIds = parsed.filter((id) => !id.startsWith("prod-"));
+        setWishlistIds(cleanIds);
+        localStorage.setItem("dhakaiya_wishlist", JSON.stringify(cleanIds));
       }
     } catch {
       // Fallback

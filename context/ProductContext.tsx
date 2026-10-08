@@ -16,15 +16,66 @@ export interface ColorItem {
   hex: string;
 }
 
+export interface SocialLinks {
+  facebook?: string;
+  instagram?: string;
+  tiktok?: string;
+  whatsapp?: string;
+  youtube?: string;
+  twitter?: string;
+  messenger?: string;
+}
+
+export interface StoreSettings {
+  logoUrl: string | null;
+  deliveryInsideDhaka: number;
+  deliveryOutsideDhaka: number;
+  freeShippingThreshold: number;
+  socialLinks: SocialLinks;
+  phone?: string;
+  email?: string;
+  address?: string;
+  adminUsername?: string;
+  adminPassword?: string;
+  updatedAt?: string;
+}
+
+export const DEFAULT_STORE_SETTINGS: StoreSettings = {
+  logoUrl: "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png",
+  deliveryInsideDhaka: 80,
+  deliveryOutsideDhaka: 150,
+  freeShippingThreshold: 3000,
+  socialLinks: {
+    facebook: "https://facebook.com",
+    instagram: "https://instagram.com",
+    tiktok: "https://tiktok.com",
+    whatsapp: "https://wa.me/8801799445851",
+    youtube: "",
+    twitter: "",
+  },
+  phone: "+880 1799-445851",
+  email: "support@dhakaiyadripz.com",
+  address: "Gulshan 1 / Banani Hub, Dhaka, Bangladesh",
+  adminUsername: "admin",
+  adminPassword: "admin",
+};
+
 interface ProductContextType {
   products: ProductItem[];
   categories: CategoryItem[];
   sizes: string[];
   colors: ColorItem[];
+  settings: StoreSettings;
+  updateSettings: (newSettings: Partial<StoreSettings>) => Promise<void>;
+  updateDeliveryCharges: (inside: number, outside: number, threshold?: number) => Promise<void>;
+  updateSocialLinks: (links: SocialLinks) => Promise<void>;
+  updateContactInfo: (contact: { phone?: string; email?: string; address?: string }) => Promise<void>;
   addProduct: (product: ProductItem) => void;
+  updateProduct: (product: ProductItem) => void;
   deleteProduct: (id: string) => void;
   updateStock: (productId: string, size: string, delta: number) => void;
   addCategory: (name: string, description?: string, image?: string) => void;
+  updateCategory: (category: CategoryItem) => void;
   deleteCategory: (id: string) => void;
   addColor: (name: string, hex: string) => void;
   deleteColor: (name: string) => void;
@@ -38,46 +89,108 @@ interface ProductContextType {
 }
 
 const DEFAULT_CATEGORIES: CategoryItem[] = [
-  { id: "cat-1", name: "Pants", slug: "Pants", description: "Tactical twill trousers & parachute cargos" },
-  { id: "cat-2", name: "Oversized Tees", slug: "Oversized-Tees", description: "Heavyweight 260GSM combed boxy tees" },
-  { id: "cat-3", name: "Shirts", slug: "Shirts", description: "Raw-edge Cuban camp collar shirts" },
-  { id: "cat-4", name: "Jackets & Hoodies", slug: "Jackets-&-Hoodies", description: "Distressed acid-wash French Terry" },
-  { id: "cat-5", name: "Accessories", slug: "Accessories", description: "Tactical cross-body rigs & belts" },
+  {
+    id: "cat-1",
+    name: "Pants",
+    slug: "Pants",
+    description: "Tactical twill trousers & parachute cargos",
+  },
+  {
+    id: "cat-2",
+    name: "Oversized Tees",
+    slug: "Oversized-Tees",
+    description: "Heavyweight 260GSM combed boxy tees",
+  },
+  {
+    id: "cat-3",
+    name: "Shirts",
+    slug: "Shirts",
+    description: "Raw-edge Cuban camp collar shirts",
+  },
+  {
+    id: "cat-4",
+    name: "Jackets & Hoodies",
+    slug: "Jackets-&-Hoodies",
+    description: "Distressed acid-wash French Terry",
+  },
+  {
+    id: "cat-5",
+    name: "Accessories",
+    slug: "Accessories",
+    description: "Tactical cross-body rigs & belts",
+  },
 ];
 
 const DEFAULT_COLORS: ColorItem[] = [
-  { name: "Pitch Black", hex: "#111111" },
-  { name: "Acid Lime", hex: "#D4FF00" },
-  { name: "Wood Green", hex: "#2E3A2F" },
-  { name: "Cement Grey", hex: "#7E827A" },
+  { name: "Pitch Black", hex: "#0A0E17" },
+  { name: "Cyber Cyan", hex: "#00A3FF" },
+  { name: "Electric Blue", hex: "#0066FF" },
+  { name: "Ice Blue", hex: "#38BDF8" },
   { name: "Chalk Off-White", hex: "#F4F3EF" },
   { name: "Battleship Grey", hex: "#4A4D4F" },
-  { name: "Ecru Linen", hex: "#E3DAC9" },
   { name: "Mineral Charcoal", hex: "#2B2D2F" },
   { name: "Washed Sage", hex: "#7D8C7C" },
-  { name: "Desert Khaki", hex: "#A89F91" },
+  { name: "Cement Grey", hex: "#7E827A" },
+  { name: "Ecru Linen", hex: "#E3DAC9" },
 ];
 
 const DEFAULT_SIZES = ["S", "M", "L", "XL", "XXL", "28", "30", "32", "34", "36", "ONE SIZE"];
 
 const ProductContext = createContext<ProductContextType | undefined>(undefined);
 
+// Helper to identify and purge legacy dummy/mock products
+const isDummyProduct = (p: ProductItem) => {
+  if (!p || !p.id) return true;
+  const isOldMockId = /^prod-[1-8]$/.test(p.id) || p.id.startsWith("mock-");
+  const hasMockUnsplash = Array.isArray(p.images) && p.images.some(
+    (img) =>
+      img.includes("images.unsplash.com/photo-1624378439575") ||
+      img.includes("images.unsplash.com/photo-1521572267360") ||
+      img.includes("images.unsplash.com/photo-1517445312882") ||
+      img.includes("images.unsplash.com/photo-1596755094514") ||
+      img.includes("images.unsplash.com/photo-1556905055") ||
+      img.includes("images.unsplash.com/photo-1553062407")
+  );
+  return isOldMockId || hasMockUnsplash;
+};
+
 export function ProductProvider({ children }: { children: React.ReactNode }) {
   const [products, setProducts] = useState<ProductItem[]>(INITIAL_PRODUCTS);
   const [categories, setCategories] = useState<CategoryItem[]>(DEFAULT_CATEGORIES);
   const [colors, setColors] = useState<ColorItem[]>(DEFAULT_COLORS);
   const [sizes, setSizes] = useState<string[]>(DEFAULT_SIZES);
-  const [customLogoUrl, setCustomLogoUrl] = useState<string | null>(null);
+  const [settings, setSettings] = useState<StoreSettings>(DEFAULT_STORE_SETTINGS);
+  const [customLogoUrl, setCustomLogoUrl] = useState<string | null>(
+    DEFAULT_STORE_SETTINGS.logoUrl
+  );
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // Load saved state from localStorage
+  // Load saved state from localStorage and sanitize out any legacy dummy data
   useEffect(() => {
     try {
       const savedProducts = localStorage.getItem("dhakaiya_dyn_products");
-      if (savedProducts) setProducts(JSON.parse(savedProducts));
+      if (savedProducts) {
+        const parsed: ProductItem[] = JSON.parse(savedProducts);
+        const cleanProducts = parsed.filter((p) => !isDummyProduct(p));
+        setProducts(cleanProducts);
+        localStorage.setItem("dhakaiya_dyn_products", JSON.stringify(cleanProducts));
+      } else {
+        setProducts([]);
+      }
 
       const savedCategories = localStorage.getItem("dhakaiya_dyn_categories");
-      if (savedCategories) setCategories(JSON.parse(savedCategories));
+      if (savedCategories) {
+        const parsed: CategoryItem[] = JSON.parse(savedCategories);
+        // Cleanse legacy unsplash images from categories so user has clean slate
+        const cleansed = parsed.map((cat) => {
+          if (cat.image && cat.image.includes("images.unsplash.com/photo-")) {
+            return { ...cat, image: undefined };
+          }
+          return cat;
+        });
+        setCategories(cleansed);
+        localStorage.setItem("dhakaiya_dyn_categories", JSON.stringify(cleansed));
+      }
 
       const savedColors = localStorage.getItem("dhakaiya_dyn_colors");
       if (savedColors) setColors(JSON.parse(savedColors));
@@ -85,29 +198,66 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       const savedSizes = localStorage.getItem("dhakaiya_dyn_sizes");
       if (savedSizes) setSizes(JSON.parse(savedSizes));
 
+      const savedSettings = localStorage.getItem("dhakaiya_store_settings");
+      if (savedSettings) {
+        try {
+          const parsed = JSON.parse(savedSettings);
+          setSettings((prev) => ({
+            ...prev,
+            ...parsed,
+            socialLinks: { ...prev.socialLinks, ...(parsed.socialLinks || {}) },
+          }));
+        } catch {}
+      }
+
       const savedLogo = localStorage.getItem("dhakaiya_custom_logo");
-      if (savedLogo) setCustomLogoUrl(savedLogo);
+      if (savedLogo && !savedLogo.includes("shadcn.png")) {
+        setCustomLogoUrl(savedLogo);
+      } else {
+        setCustomLogoUrl("/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png");
+        localStorage.setItem("dhakaiya_custom_logo", "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png");
+      }
     } catch {
       // Fallback
     } finally {
       setIsLoaded(true);
     }
 
-    // Also sync logo from server storage
+    // Also sync settings & logo from server storage
     fetch("/api/settings")
       .then((res) => res.json())
       .then((data) => {
-        if (data?.settings?.logoUrl !== undefined) {
-          setCustomLogoUrl(data.settings.logoUrl);
-          if (data.settings.logoUrl) {
-            localStorage.setItem("dhakaiya_custom_logo", data.settings.logoUrl);
-          } else {
-            localStorage.removeItem("dhakaiya_custom_logo");
+        if (data?.settings) {
+          const s = data.settings;
+          setSettings(s);
+          localStorage.setItem("dhakaiya_store_settings", JSON.stringify(s));
+          if (s.logoUrl && !s.logoUrl.includes("shadcn.png")) {
+            setCustomLogoUrl(s.logoUrl);
+            localStorage.setItem("dhakaiya_custom_logo", s.logoUrl);
           }
         }
       })
       .catch((err) => {
         console.warn("Failed to fetch server settings:", err);
+      });
+    // Also sync products from server storage
+    fetch("/api/products")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.success && Array.isArray(data.products) && data.products.length > 0) {
+          const serverProducts: ProductItem[] = data.products.filter((p: ProductItem) => !isDummyProduct(p));
+          setProducts((prev) => {
+            const map = new Map<string, ProductItem>();
+            prev.filter((p) => !isDummyProduct(p)).forEach((p) => map.set(p.id, p));
+            serverProducts.forEach((p) => map.set(p.id, p));
+            const merged = Array.from(map.values());
+            localStorage.setItem("dhakaiya_dyn_products", JSON.stringify(merged));
+            return merged;
+          });
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed to fetch server products:", err);
       });
   }, []);
 
@@ -122,7 +272,43 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
   }, [products, categories, colors, sizes, isLoaded]);
 
   const addProduct = (newProduct: ProductItem) => {
-    setProducts((prev) => [newProduct, ...prev]);
+    setProducts((prev) => {
+      const next = [newProduct, ...prev.filter((p) => p.id !== newProduct.id)];
+      try {
+        localStorage.setItem("dhakaiya_dyn_products", JSON.stringify(next));
+      } catch (e) {
+        console.error("Failed to save product in localStorage:", e);
+      }
+      return next;
+    });
+
+    // Also persist to server storage
+    fetch("/api/products", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(newProduct),
+    }).catch((err) => {
+      console.warn("Failed to persist product to server:", err);
+    });
+  };
+
+  const updateProduct = (updated: ProductItem) => {
+    setProducts((prev) => {
+      const next = prev.map((p) => (p.id === updated.id ? updated : p));
+      try {
+        localStorage.setItem("dhakaiya_dyn_products", JSON.stringify(next));
+      } catch (e) {
+        console.error("Failed to update product in localStorage:", e);
+      }
+      return next;
+    });
+
+    // Also sync to server if applicable
+    fetch("/api/products", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(updated),
+    }).catch(() => {});
   };
 
   const deleteProduct = (id: string) => {
@@ -186,7 +372,35 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     fetch("/api/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ name: newCat.name, slug: newCat.slug, description: newCat.description }),
+      body: JSON.stringify({
+        name: newCat.name,
+        slug: newCat.slug,
+        description: newCat.description,
+        image: newCat.image,
+      }),
+    }).catch(() => {});
+  };
+
+  const updateCategory = (updated: CategoryItem) => {
+    setCategories((prev) => {
+      const next = prev.map((c) => (c.id === updated.id ? updated : c));
+      try {
+        localStorage.setItem("dhakaiya_dyn_categories", JSON.stringify(next));
+      } catch {}
+      return next;
+    });
+
+    // Also sync to PostgreSQL database
+    fetch("/api/categories", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: updated.id,
+        name: updated.name,
+        slug: updated.slug,
+        description: updated.description,
+        image: updated.image,
+      }),
     }).catch(() => {});
   };
 
@@ -268,26 +482,58 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
-  const updateLogo = (url: string | null) => {
-    setCustomLogoUrl(url);
+  const updateSettings = async (newSettings: Partial<StoreSettings>) => {
+    const updated: StoreSettings = {
+      ...settings,
+      ...newSettings,
+      socialLinks: {
+        ...settings.socialLinks,
+        ...(newSettings.socialLinks || {}),
+      },
+    };
+    setSettings(updated);
+    if (newSettings.logoUrl !== undefined) {
+      setCustomLogoUrl(newSettings.logoUrl);
+    }
     try {
-      if (url) {
-        localStorage.setItem("dhakaiya_custom_logo", url);
-      } else {
-        localStorage.removeItem("dhakaiya_custom_logo");
+      localStorage.setItem("dhakaiya_store_settings", JSON.stringify(updated));
+      if (updated.logoUrl) {
+        localStorage.setItem("dhakaiya_custom_logo", updated.logoUrl);
       }
     } catch (e) {
-      console.error("Failed to update custom logo in localStorage:", e);
+      console.error("Failed to save settings to localStorage:", e);
     }
 
-    // Persist to server
-    fetch("/api/settings", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ logoUrl: url }),
-    }).catch((err) => {
-      console.warn("Failed to persist logo to server:", err);
+    try {
+      await fetch("/api/settings", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(newSettings),
+      });
+    } catch (err) {
+      console.warn("Failed to persist settings to server:", err);
+    }
+  };
+
+  const updateDeliveryCharges = async (inside: number, outside: number, threshold?: number) => {
+    await updateSettings({
+      deliveryInsideDhaka: inside,
+      deliveryOutsideDhaka: outside,
+      ...(threshold !== undefined ? { freeShippingThreshold: threshold } : {}),
     });
+  };
+
+  const updateSocialLinks = async (links: SocialLinks) => {
+    await updateSettings({ socialLinks: links });
+  };
+
+  const updateContactInfo = async (contact: { phone?: string; email?: string; address?: string }) => {
+    await updateSettings(contact);
+  };
+
+  const updateLogo = (url: string | null) => {
+    setCustomLogoUrl(url);
+    updateSettings({ logoUrl: url });
   };
 
   const getProductBySlug = (slug: string) => {
@@ -301,10 +547,17 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         categories,
         sizes,
         colors,
+        settings,
+        updateSettings,
+        updateDeliveryCharges,
+        updateSocialLinks,
+        updateContactInfo,
         addProduct,
+        updateProduct,
         deleteProduct,
         updateStock,
         addCategory,
+        updateCategory,
         deleteCategory,
         addColor,
         deleteColor,

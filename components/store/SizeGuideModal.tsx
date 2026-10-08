@@ -32,7 +32,7 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
         {/* Header */}
         <div className="flex items-center justify-between pb-4 border-b border-zinc-200 dark:border-zinc-800">
           <div className="flex items-center gap-2">
-            <Ruler className="w-5 h-5 text-black dark:text-[#d4ff00]" />
+            <Ruler className="w-5 h-5 text-[#0066ff] dark:text-[#00a3ff]" />
             <h3 className="text-lg font-black uppercase tracking-wider text-zinc-950 dark:text-white">
               {isPant ? "Trousers & Cargos Size Chart" : "Tops & Oversized Silhouette Guide"}
             </h3>
@@ -80,7 +80,7 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
                     <td className="py-2.5 px-4">17.0</td>
                   </tr>
                   <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-900/50 bg-zinc-100/50 dark:bg-zinc-900/20">
-                    <td className="py-2.5 px-4 font-bold text-black dark:text-[#d4ff00]">32 (Most Popular)</td>
+                    <td className="py-2.5 px-4 font-bold text-[#0066ff] dark:text-[#00a3ff]">32 (Most Popular)</td>
                     <td className="py-2.5 px-4">32 - 33</td>
                     <td className="py-2.5 px-4">41.5</td>
                     <td className="py-2.5 px-4">42</td>
@@ -122,7 +122,7 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
                     <td className="py-2.5 px-4">9.0</td>
                   </tr>
                   <tr className="hover:bg-zinc-50 dark:hover:bg-zinc-900/50 bg-zinc-100/50 dark:bg-zinc-900/20">
-                    <td className="py-2.5 px-4 font-bold text-black dark:text-[#d4ff00]">M (Regular Streetwear)</td>
+                    <td className="py-2.5 px-4 font-bold text-[#0066ff] dark:text-[#00a3ff]">M (Regular Streetwear)</td>
                     <td className="py-2.5 px-4">44</td>
                     <td className="py-2.5 px-4">29</td>
                     <td className="py-2.5 px-4">22</td>
@@ -150,7 +150,7 @@ export default function SizeGuideModal({ isOpen, onClose, category }: SizeGuideM
           {/* Sizing Tips */}
           <div className="bg-zinc-50 dark:bg-zinc-900/70 p-3.5 rounded-xl border border-zinc-200 dark:border-zinc-800 text-xs text-zinc-700 dark:text-zinc-300 space-y-1.5">
             <div className="font-bold text-zinc-950 dark:text-white flex items-center gap-1.5">
-              <CheckCircle2 className="w-4 h-4 text-black dark:text-[#d4ff00]" /> Dhakaiya Dripz Fit Philosophy
+              <CheckCircle2 className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" /> Dhakaiya Dripz Fit Philosophy
             </div>
             <p className="text-zinc-600 dark:text-zinc-400">
               If you prefer an authentic boxy/drop-shoulder look, select your true standard size. For a more tailored/fitted appearance, we recommend ordering one size down.

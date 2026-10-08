@@ -1,0 +1,89 @@
+[
+  {
+    "id": "drip-prod-1791429847619",
+    "title": "product 1",
+    "slug": "product-1-7619",
+    "tagline": "Lorem",
+    "description": "Add",
+    "basePrice": 2500,
+    "salePrice": 2000,
+    "gender": "MEN",
+    "category": "Shirts",
+    "fit": "OVERSIZED",
+    "isNewDrop": true,
+    "isFeatured": true,
+    "stockCount": 25,
+    "images": [
+      "/uploads/drip-premium_photo-168997-1791429834885-8254.avif"
+    ],
+    "sizes": [
+      {
+        "size": "36",
+        "stock": 5
+      },
+      {
+        "size": "34",
+        "stock": 5
+      },
+      {
+        "size": "32",
+        "stock": 5
+      },
+      {
+        "size": "30",
+        "stock": 5
+      },
+      {
+        "size": "55",
+        "stock": 5
+      }
+    ],
+    "colors": [
+      {
+        "name": "Chalk Off-White",
+        "hex": "#F4F3EF"
+      }
+    ],
+    "details": [
+      "Architectural heavyweight combed cotton construction",
+      "Reinforced stress seams for active durability",
+      "Permanent structure wash finish",
+      "Engineered for humid Dhaka weather"
+    ]
+  },
+  {
+    "id": "drip-prod-1791429664255",
+    "title": "Acid Wash Oversized Drop Tee",
+    "slug": "acid-wash-oversized-drop-tee-4255",
+    "tagline": "OVERSIZED silhouette casualwear crafted for Dhaka urban aesthetic.",
+    "description": "Heavyweight custom combed weave garment with architectural drape.",
+    "basePrice": 2200,
+    "gender": "UNISEX",
+    "category": "Oversized Tees",
+    "fit": "OVERSIZED",
+    "isNewDrop": true,
+    "isFeatured": true,
+    "stockCount": 5,
+    "images": [
+      "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png"
+    ],
+    "sizes": [
+      {
+        "size": "L",
+        "stock": 5
+      }
+    ],
+    "colors": [
+      {
+        "name": "Pitch Black",
+        "hex": "#111111"
+      }
+    ],
+    "details": [
+      "Architectural heavyweight combed cotton construction",
+      "Reinforced stress seams for active durability",
+      "Permanent structure wash finish",
+      "Engineered for humid Dhaka weather"
+    ]
+  }
+]

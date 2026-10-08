@@ -18,6 +18,9 @@ export default function CartDrawer() {
     deliveryZone,
     setDeliveryZone,
     deliveryCharge,
+    deliveryInsideDhaka,
+    deliveryOutsideDhaka,
+    freeShippingThreshold,
     amountNeededForFreeShipping,
     totalAmount,
   } = useCart();
@@ -43,7 +46,8 @@ export default function CartDrawer() {
 
   if (!isCartOpen) return null;
 
-  const progressPercent = Math.min(100, Math.round((subtotal / FREE_SHIPPING_THRESHOLD) * 100));
+  const effectiveThreshold = freeShippingThreshold > 0 ? freeShippingThreshold : FREE_SHIPPING_THRESHOLD;
+  const progressPercent = Math.min(100, Math.round((subtotal / effectiveThreshold) * 100));
 
   return (
     <div className="fixed inset-0 z-50 overflow-hidden">
@@ -59,7 +63,7 @@ export default function CartDrawer() {
           {/* Header */}
           <div className="p-4 sm:p-5 border-b border-zinc-200 dark:border-zinc-900 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/40">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-black dark:text-[#d4ff00]" />
+              <ShoppingBag className="w-5 h-5 text-[#0066ff] dark:text-[#00a3ff]" />
               <h2 className="text-base font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
                 Shopping Bag ({items.reduce((s, i) => s + i.quantity, 0)})
               </h2>
@@ -77,13 +81,13 @@ export default function CartDrawer() {
           <div className="bg-zinc-100/70 dark:bg-zinc-900/60 p-3.5 border-b border-zinc-200 dark:border-zinc-900 text-xs">
             <div className="flex items-center justify-between mb-1.5 font-medium">
               <span className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300">
-                <Truck className="w-4 h-4 text-black dark:text-[#d4ff00]" />
+                <Truck className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" />
                 {amountNeededForFreeShipping > 0 ? (
                   <span>
                     Add <strong className="text-black dark:text-white font-mono">{formatPrice(amountNeededForFreeShipping)}</strong> more for <strong>FREE Delivery</strong>
                   </span>
                 ) : (
-                  <span className="text-emerald-600 dark:text-[#d4ff00] font-bold">
+                  <span className="text-[#0088ff] dark:text-[#00a3ff] font-bold">
                     🎉 You unlocked FREE Delivery across Bangladesh!
                   </span>
                 )}
@@ -92,7 +96,7 @@ export default function CartDrawer() {
             </div>
             <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-[#d4ff00] h-full transition-all duration-500 rounded-full"
+                className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] h-full transition-all duration-500 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -114,7 +118,7 @@ export default function CartDrawer() {
                 <Link
                   href="/shop"
                   onClick={closeCart}
-                  className="bg-[#d4ff00] text-black font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-full hover:bg-[#b8dd00] transition shadow-xs"
+                  className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg shadow-[#0088ff]/25 transition"
                 >
                   Shop New Drops
                 </Link>
@@ -143,7 +147,7 @@ export default function CartDrawer() {
                         <Link
                           href={`/product/${item.slug}`}
                           onClick={closeCart}
-                          className="text-sm font-bold text-zinc-900 dark:text-white hover:text-black dark:hover:text-[#d4ff00] transition line-clamp-1"
+                          className="text-sm font-bold text-zinc-900 dark:text-white hover:text-black dark:hover:text-[#00a3ff] transition line-clamp-1"
                         >
                           {item.title}
                         </Link>
@@ -171,7 +175,7 @@ export default function CartDrawer() {
                       <div className="flex items-center border border-zinc-300 dark:border-zinc-800 rounded-lg bg-white dark:bg-zinc-950">
                         <button
                           onClick={() => updateQuantity(item.id, -1)}
-                          className="p-1 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-[#d4ff00] transition"
+                          className="p-1 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-[#00a3ff] transition"
                           aria-label="Decrease quantity"
                         >
                           <Minus className="w-3.5 h-3.5" />
@@ -182,7 +186,7 @@ export default function CartDrawer() {
                         <button
                           onClick={() => updateQuantity(item.id, 1)}
                           disabled={item.quantity >= item.maxStock}
-                          className="p-1 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-[#d4ff00] disabled:opacity-30 transition"
+                          className="p-1 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-[#00a3ff] disabled:opacity-30 transition"
                           aria-label="Increase quantity"
                         >
                           <Plus className="w-3.5 h-3.5" />
@@ -208,33 +212,33 @@ export default function CartDrawer() {
               <div className="bg-white dark:bg-zinc-950 p-2.5 rounded-xl border border-zinc-200 dark:border-zinc-800/80 shadow-xs">
                 <div className="text-[11px] font-bold text-zinc-600 dark:text-zinc-400 uppercase tracking-wider mb-2 flex items-center justify-between">
                   <span>Shipping Zone</span>
-                  <span className="text-zinc-950 dark:text-[#d4ff00] font-black text-[10px]">CASH ON DELIVERY</span>
+                  <span className="text-zinc-950 dark:text-[#00a3ff] font-black text-[10px]">CASH ON DELIVERY</span>
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-xs">
                   <button
                     onClick={() => setDeliveryZone("INSIDE_DHAKA")}
                     className={`py-2 px-2.5 rounded-lg border text-center transition font-semibold ${
                       deliveryZone === "INSIDE_DHAKA"
-                        ? "border-black dark:border-[#d4ff00] bg-zinc-100 dark:bg-[#d4ff00]/10 text-black dark:text-[#d4ff00]"
+                        ? "border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 text-black dark:text-[#00a3ff]"
                         : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                     }`}
                   >
                     <div>Inside Dhaka</div>
                     <div className="text-[10px] font-mono opacity-80">
-                      {amountNeededForFreeShipping === 0 ? "FREE" : "৳80"}
+                      {amountNeededForFreeShipping === 0 ? "FREE" : `৳${deliveryInsideDhaka}`}
                     </div>
                   </button>
                   <button
                     onClick={() => setDeliveryZone("OUTSIDE_DHAKA")}
                     className={`py-2 px-2.5 rounded-lg border text-center transition font-semibold ${
                       deliveryZone === "OUTSIDE_DHAKA"
-                        ? "border-black dark:border-[#d4ff00] bg-zinc-100 dark:bg-[#d4ff00]/10 text-black dark:text-[#d4ff00]"
+                        ? "border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 text-black dark:text-[#00a3ff]"
                         : "border-zinc-200 dark:border-zinc-800 text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                     }`}
                   >
                     <div>Outside Dhaka</div>
                     <div className="text-[10px] font-mono opacity-80">
-                      {amountNeededForFreeShipping === 0 ? "FREE" : "৳150"}
+                      {amountNeededForFreeShipping === 0 ? "FREE" : `৳${deliveryOutsideDhaka}`}
                     </div>
                   </button>
                 </div>
@@ -250,7 +254,7 @@ export default function CartDrawer() {
                   <span>Estimated Shipping</span>
                   <span className="font-mono text-zinc-950 dark:text-white font-bold">
                     {deliveryCharge === 0 ? (
-                      <span className="text-emerald-600 dark:text-[#d4ff00] font-bold">FREE</span>
+                      <span className="text-[#0088ff] dark:text-[#00a3ff] font-bold">FREE</span>
                     ) : (
                       formatPrice(deliveryCharge)
                     )}
@@ -258,7 +262,7 @@ export default function CartDrawer() {
                 </div>
                 <div className="flex justify-between text-sm font-bold text-zinc-950 dark:text-white pt-2 border-t border-zinc-200 dark:border-zinc-800">
                   <span>Estimated Total</span>
-                  <span className="font-mono text-zinc-950 dark:text-[#d4ff00] text-base font-black">
+                  <span className="font-mono text-zinc-950 dark:text-[#00a3ff] text-base font-black">
                     {formatPrice(totalAmount)}
                   </span>
                 </div>
@@ -268,14 +272,14 @@ export default function CartDrawer() {
               <Link
                 href="/checkout"
                 onClick={closeCart}
-                className="w-full bg-[#d4ff00] hover:bg-[#c2ea00] text-black font-black text-sm uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[#d4ff00]/20 transition group"
+                className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-sm uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[#0088ff]/25 transition group"
               >
                 <span>Proceed to COD Checkout</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </Link>
 
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-zinc-500 text-center">
-                <ShieldCheck className="w-3.5 h-3.5 text-black dark:text-[#d4ff00]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" />
                 <span>Pay cash upon parcel delivery | Inspect before you receive</span>
               </div>
             </div>

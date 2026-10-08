@@ -18,6 +18,7 @@ import {
 import Navbar from "@/components/store/Navbar";
 import Footer from "@/components/store/Footer";
 import { useCart } from "@/context/CartContext";
+import { useProducts } from "@/context/ProductContext";
 import { formatPrice, generateOrderNumber } from "@/lib/utils";
 
 export default function CheckoutPage() {
@@ -27,9 +28,13 @@ export default function CheckoutPage() {
     deliveryZone,
     setDeliveryZone,
     deliveryCharge,
+    deliveryInsideDhaka,
+    deliveryOutsideDhaka,
+    freeShippingThreshold,
     totalAmount,
     clearCart,
   } = useCart();
+  const { settings } = useProducts();
 
   // Form fields
   const [fullName, setFullName] = useState("");
@@ -72,6 +77,38 @@ export default function CheckoutPage() {
 
     setTimeout(() => {
       const orderNumber = generateOrderNumber();
+      const newOrderRecord = {
+        id: `ord-${Date.now()}`,
+        orderNumber,
+        customerName: fullName,
+        customerPhone: phone,
+        customerEmail: altPhone || undefined,
+        deliveryZone,
+        shippingAddress: address,
+        deliveryCharge,
+        subtotal,
+        totalAmount,
+        paymentMethod: "COD" as const,
+        orderStatus: "PENDING" as const,
+        items: items.map((it) => ({
+          title: it.title,
+          size: it.size,
+          color: it.color,
+          quantity: it.quantity,
+          price: it.price,
+        })),
+        createdAt: new Date().toISOString(),
+      };
+
+      try {
+        const existingRaw = localStorage.getItem("dhakaiya_admin_orders");
+        const existing = existingRaw ? JSON.parse(existingRaw) : [];
+        const next = [newOrderRecord, ...existing];
+        localStorage.setItem("dhakaiya_admin_orders", JSON.stringify(next));
+      } catch (err) {
+        console.error("Failed to save order to localStorage:", err);
+      }
+
       setPlacedOrder({
         orderNumber,
         customerName: fullName,
@@ -89,17 +126,17 @@ export default function CheckoutPage() {
   // If order was placed successfully:
   if (placedOrder) {
     return (
-      <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#d4ff00] selection:text-black">
+      <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#0088ff] selection:text-white">
         <Navbar />
 
         <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-20 w-full text-center">
           <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-6">
-            <div className="w-16 h-16 bg-[#d4ff00]/20 border border-[#d4ff00] rounded-full flex items-center justify-center mx-auto text-black dark:text-[#d4ff00]">
+            <div className="w-16 h-16 bg-[#0088ff]/15 border border-[#00a3ff] rounded-full flex items-center justify-center mx-auto text-[#0066ff] dark:text-[#00a3ff]">
               <CheckCircle2 className="w-9 h-9" />
             </div>
 
             <div className="space-y-2">
-              <span className="inline-block bg-[#d4ff00] text-black font-extrabold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow-xs">
+              <span className="inline-block bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow-xs">
                 COD ORDER RECEIVED
               </span>
               <h1 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-zinc-950 dark:text-white">
@@ -114,7 +151,7 @@ export default function CheckoutPage() {
             <div className="bg-white dark:bg-zinc-950 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 text-left space-y-3 font-mono text-xs shadow-xs">
               <div className="flex justify-between border-b border-zinc-100 dark:border-zinc-900 pb-2">
                 <span className="text-zinc-500">Order ID:</span>
-                <span className="text-zinc-950 dark:text-[#d4ff00] font-black text-sm">{placedOrder.orderNumber}</span>
+                <span className="text-zinc-950 dark:text-[#00a3ff] font-black text-sm">{placedOrder.orderNumber}</span>
               </div>
               <div className="flex justify-between border-b border-zinc-100 dark:border-zinc-900 pb-2">
                 <span className="text-zinc-500">Payment:</span>
@@ -130,19 +167,19 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between pt-1 text-sm font-bold">
                 <span className="text-zinc-900 dark:text-white">Amount Due on Delivery:</span>
-                <span className="text-zinc-950 dark:text-[#d4ff00] text-base font-black">{formatPrice(placedOrder.totalAmount)}</span>
+                <span className="text-zinc-950 dark:text-[#00a3ff] text-base font-black">{formatPrice(placedOrder.totalAmount)}</span>
               </div>
             </div>
 
             {/* Timeline */}
             <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-left text-xs space-y-3">
               <div className="font-bold text-zinc-900 dark:text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-black dark:text-[#d4ff00]" /> What Happens Next?
+                <Clock className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" /> What Happens Next?
               </div>
               <div className="space-y-2 text-zinc-600 dark:text-zinc-400">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-[#d4ff00] text-black font-bold text-[10px] flex items-center justify-center">1</span>
-                  <span><strong>Verification Call:</strong> Expect a call from 01799445851 within 2 business hours.</span>
+                  <span className="w-5 h-5 rounded-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-bold text-[10px] flex items-center justify-center">1</span>
+                  <span><strong>Verification Call:</strong> Expect a call from {settings?.phone || "our helpline"} within 2 business hours.</span>
                 </div>
                 <div className="flex items-center gap-2">
                   <span className="w-5 h-5 rounded-full bg-zinc-200 dark:bg-zinc-800 text-zinc-800 dark:text-zinc-300 font-bold text-[10px] flex items-center justify-center">2</span>
@@ -158,15 +195,15 @@ export default function CheckoutPage() {
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/shop"
-                className="bg-[#d4ff00] hover:bg-[#b8dd00] text-black font-extrabold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition shadow-md"
+                className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-extrabold text-xs uppercase tracking-wider px-8 py-3.5 rounded-xl transition shadow-lg shadow-[#0088ff]/25 text-center"
               >
                 Continue Shopping
               </Link>
               <Link
-                href="/admin"
-                className="bg-zinc-900 dark:bg-zinc-800 hover:bg-zinc-800 text-white font-bold text-xs uppercase tracking-wider px-6 py-3.5 rounded-xl transition"
+                href="/"
+                className="bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 dark:hover:bg-zinc-700 text-zinc-900 dark:text-white font-bold text-xs uppercase tracking-wider px-8 py-3.5 rounded-xl transition text-center"
               >
-                View in Admin Panel
+                Back to Home
               </Link>
             </div>
           </div>
@@ -178,7 +215,7 @@ export default function CheckoutPage() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#d4ff00] selection:text-black">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#0088ff] selection:text-white">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 sm:py-12 w-full">
@@ -206,7 +243,7 @@ export default function CheckoutPage() {
             </p>
             <Link
               href="/shop"
-              className="inline-flex bg-[#d4ff00] text-black font-black text-xs uppercase px-6 py-3 rounded-full hover:bg-[#b8dd00] transition"
+              className="inline-flex bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-xs uppercase px-6 py-3 rounded-full shadow-lg shadow-[#0088ff]/25 transition"
             >
               Shop New Drops
             </Link>
@@ -221,7 +258,7 @@ export default function CheckoutPage() {
                 {/* 1. Contact Info Card */}
                 <div className="bg-zinc-50 dark:bg-zinc-900/40 p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 space-y-4 shadow-xs">
                   <div className="flex items-center gap-2 pb-3 border-b border-zinc-200 dark:border-zinc-800 text-sm font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
-                    <User className="w-4 h-4 text-black dark:text-[#d4ff00]" />
+                    <User className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" />
                     <span>1. Customer & Phone Details</span>
                   </div>
 
@@ -237,9 +274,9 @@ export default function CheckoutPage() {
                           setFullName(e.target.value);
                           if (errors.fullName) setErrors({ ...errors, fullName: "" });
                         }}
-                        placeholder="e.g. Tanvir Ahmed"
+                        placeholder="Enter your full name"
                         className={`w-full bg-white dark:bg-zinc-950 border rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none transition ${
-                          errors.fullName ? "border-red-500" : "border-zinc-300 dark:border-zinc-800 focus:border-black dark:focus:border-[#d4ff00]"
+                          errors.fullName ? "border-red-500" : "border-zinc-300 dark:border-zinc-800 focus:border-black dark:focus:border-[#00a3ff]"
                         }`}
                       />
                       {errors.fullName && (
@@ -262,7 +299,7 @@ export default function CheckoutPage() {
                         }}
                         placeholder="017XXXXXXXX"
                         className={`w-full bg-white dark:bg-zinc-950 border rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 font-mono focus:outline-none transition ${
-                          errors.phone ? "border-red-500" : "border-zinc-300 dark:border-zinc-800 focus:border-black dark:focus:border-[#d4ff00]"
+                          errors.phone ? "border-red-500" : "border-zinc-300 dark:border-zinc-800 focus:border-black dark:focus:border-[#00a3ff]"
                         }`}
                       />
                       {errors.phone && (
@@ -282,7 +319,7 @@ export default function CheckoutPage() {
                       value={altPhone}
                       onChange={(e) => setAltPhone(e.target.value)}
                       placeholder="018XXXXXXXX (backup number in case main is busy)"
-                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 font-mono focus:outline-none focus:border-black dark:focus:border-[#d4ff00] transition"
+                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 font-mono focus:outline-none focus:border-black dark:focus:border-[#00a3ff] transition"
                     />
                   </div>
                 </div>
@@ -290,7 +327,7 @@ export default function CheckoutPage() {
                 {/* 2. Shipping Zone & Address Card */}
                 <div className="bg-zinc-50 dark:bg-zinc-900/40 p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 space-y-4 shadow-xs">
                   <div className="flex items-center gap-2 pb-3 border-b border-zinc-200 dark:border-zinc-800 text-sm font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
-                    <Truck className="w-4 h-4 text-black dark:text-[#d4ff00]" />
+                    <Truck className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" />
                     <span>2. Delivery Zone & Address</span>
                   </div>
 
@@ -304,14 +341,14 @@ export default function CheckoutPage() {
                         onClick={() => setDeliveryZone("INSIDE_DHAKA")}
                         className={`p-3.5 rounded-xl border cursor-pointer transition ${
                           deliveryZone === "INSIDE_DHAKA"
-                            ? "border-black dark:border-[#d4ff00] bg-zinc-100 dark:bg-[#d4ff00]/10 text-zinc-950 dark:text-white"
+                            ? "border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 text-zinc-950 dark:text-white"
                             : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:border-zinc-400"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-sm text-zinc-950 dark:text-white">Inside Dhaka</span>
-                          <span className="font-mono text-xs font-bold text-black dark:text-[#d4ff00]">
-                            {subtotal >= 3000 ? "FREE" : "৳80 BDT"}
+                          <span className="font-mono text-xs font-bold text-[#0066ff] dark:text-[#00a3ff]">
+                            {subtotal >= freeShippingThreshold ? "FREE" : `৳${deliveryInsideDhaka} BDT`}
                           </span>
                         </div>
                         <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">24 to 48 Hours Delivery via RedX / Steadfast</p>
@@ -321,14 +358,14 @@ export default function CheckoutPage() {
                         onClick={() => setDeliveryZone("OUTSIDE_DHAKA")}
                         className={`p-3.5 rounded-xl border cursor-pointer transition ${
                           deliveryZone === "OUTSIDE_DHAKA"
-                            ? "border-black dark:border-[#d4ff00] bg-zinc-100 dark:bg-[#d4ff00]/10 text-zinc-950 dark:text-white"
+                            ? "border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 text-zinc-950 dark:text-white"
                             : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:border-zinc-400"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-sm text-zinc-950 dark:text-white">Outside Dhaka</span>
-                          <span className="font-mono text-xs font-bold text-black dark:text-[#d4ff00]">
-                            {subtotal >= 3000 ? "FREE" : "৳150 BDT"}
+                          <span className="font-mono text-xs font-bold text-[#0066ff] dark:text-[#00a3ff]">
+                            {subtotal >= freeShippingThreshold ? "FREE" : `৳${deliveryOutsideDhaka} BDT`}
                           </span>
                         </div>
                         <p className="text-xs text-zinc-500 dark:text-zinc-400 mt-1">Chattogram, Sylhet, Rajshahi, all districts (48-72h)</p>
@@ -350,7 +387,7 @@ export default function CheckoutPage() {
                       }}
                       placeholder="House / Flat No, Road Name, Area/Sector, Thana, District"
                       className={`w-full bg-white dark:bg-zinc-950 border rounded-xl p-3.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none transition ${
-                        errors.address ? "border-red-500" : "border-zinc-300 dark:border-zinc-800 focus:border-black dark:focus:border-[#d4ff00]"
+                        errors.address ? "border-red-500" : "border-zinc-300 dark:border-zinc-800 focus:border-black dark:focus:border-[#00a3ff]"
                       }`}
                     />
                     {errors.address && (
@@ -370,7 +407,7 @@ export default function CheckoutPage() {
                       value={deliveryNotes}
                       onChange={(e) => setDeliveryNotes(e.target.value)}
                       placeholder="e.g. Call before coming, deliver after 3 PM"
-                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-black dark:focus:border-[#d4ff00] transition"
+                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-300 dark:border-zinc-800 rounded-xl px-3.5 py-2.5 text-sm text-zinc-900 dark:text-white placeholder-zinc-400 dark:placeholder-zinc-600 focus:outline-none focus:border-black dark:focus:border-[#00a3ff] transition"
                     />
                   </div>
                 </div>
@@ -378,18 +415,18 @@ export default function CheckoutPage() {
                 {/* 3. Payment Method Card (COD Guaranteed) */}
                 <div className="bg-zinc-50 dark:bg-zinc-900/40 p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800/80 space-y-3 shadow-xs">
                   <div className="flex items-center gap-2 pb-3 border-b border-zinc-200 dark:border-zinc-800 text-sm font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
-                    <ShieldCheck className="w-4 h-4 text-black dark:text-[#d4ff00]" />
+                    <ShieldCheck className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" />
                     <span>3. Payment Protocol</span>
                   </div>
 
-                  <div className="p-4 rounded-xl border border-black dark:border-[#d4ff00] bg-zinc-100 dark:bg-[#d4ff00]/10 flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-black dark:bg-[#d4ff00] text-white dark:text-black font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="p-4 rounded-xl border border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
                       ✓
                     </div>
                     <div>
                       <div className="text-sm font-bold text-zinc-950 dark:text-white flex items-center gap-2">
                         <span>Cash on Delivery (ক্যাশ অন ডেলিভারি)</span>
-                        <span className="bg-[#d4ff00] text-black font-extrabold text-[9px] px-1.5 py-0.2 rounded uppercase">
+                        <span className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[9px] px-1.5 py-0.2 rounded uppercase">
                           No Prepayment
                         </span>
                       </div>
@@ -404,11 +441,11 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-[#d4ff00] hover:bg-[#c2ea00] disabled:bg-zinc-300 text-black font-black text-base uppercase tracking-wider py-4 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-[#d4ff00]/25 transition transform hover:-translate-y-0.5"
+                  className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] disabled:bg-zinc-300 text-white font-black text-base uppercase tracking-wider py-4 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-[#0088ff]/25 transition transform hover:-translate-y-0.5"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
-                      <span className="w-4 h-4 border-2 border-black border-t-transparent rounded-full animate-spin" />
+                      <span className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin" />
                       Securing Order...
                     </span>
                   ) : (
@@ -426,7 +463,7 @@ export default function CheckoutPage() {
               <div className="sticky top-28 bg-zinc-50 dark:bg-zinc-900/40 p-5 sm:p-6 rounded-2xl border border-zinc-200 dark:border-zinc-800 space-y-4 shadow-xs">
                 <h3 className="text-sm font-bold uppercase tracking-wider text-zinc-950 dark:text-white pb-3 border-b border-zinc-200 dark:border-zinc-800 flex items-center justify-between">
                   <span>Order Items ({items.reduce((s, i) => s + i.quantity, 0)})</span>
-                  <Link href="/shop" className="text-xs font-mono text-zinc-900 dark:text-[#d4ff00] hover:underline normal-case font-bold">
+                  <Link href="/shop" className="text-xs font-mono text-zinc-900 dark:text-[#00a3ff] hover:underline normal-case font-bold">
                     Edit Bag
                   </Link>
                 </h3>
@@ -466,7 +503,7 @@ export default function CheckoutPage() {
                     </span>
                     <span className="font-mono text-zinc-950 dark:text-white font-bold">
                       {deliveryCharge === 0 ? (
-                        <span className="text-emerald-600 dark:text-[#d4ff00] font-bold">FREE</span>
+                        <span className="text-[#0088ff] dark:text-[#00a3ff] font-bold">FREE</span>
                       ) : (
                         formatPrice(deliveryCharge)
                       )}
@@ -474,7 +511,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-base font-black text-zinc-950 dark:text-white pt-2 border-t border-zinc-200 dark:border-zinc-800">
                     <span>Payable on Delivery</span>
-                    <span className="font-mono text-zinc-950 dark:text-[#d4ff00] text-lg">
+                    <span className="font-mono text-zinc-950 dark:text-[#00a3ff] text-lg">
                       {formatPrice(totalAmount)}
                     </span>
                   </div>
@@ -482,7 +519,7 @@ export default function CheckoutPage() {
 
                 <div className="p-3 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 space-y-1">
                   <div className="text-zinc-900 dark:text-zinc-400 font-bold flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-black dark:text-[#d4ff00]" /> 100% Risk Free
+                    <ShieldCheck className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" /> 100% Risk Free
                   </div>
                   <p>You only hand over cash when the courier hands the parcel to you.</p>
                 </div>

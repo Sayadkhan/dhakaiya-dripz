@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: dhakaiyadripz_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: dhakaiya
+      POSTGRES_PASSWORD: dhakaiyadripz_secure_pass_2026
+      POSTGRES_DB: dhakaiyadripz_db
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U dhakaiya -d dhakaiyadripz_db"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    networks:
+      - dhakaiya_network
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: dhakaiyadripz_web
+    restart: unless-stopped
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      NODE_ENV: production
+      PORT: 3000
+      DATABASE_URL: postgresql://dhakaiya:dhakaiyadripz_secure_pass_2026@postgres:5432/dhakaiyadripz_db?schema=public
+      NEXT_PUBLIC_APP_URL: http://13.140.57.41
+    volumes:
+      - ./data:/app/data
+      - ./public/uploads:/app/public/uploads
+    ports:
+      - "127.0.0.1:3000:3000"
+    networks:
+      - dhakaiya_network
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  dhakaiya_network:
+    driver: bridge

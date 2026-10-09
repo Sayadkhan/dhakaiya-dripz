@@ -74,6 +74,7 @@ export default function ProductsTable({
         (p) =>
           p.title.toLowerCase().includes(q) ||
           p.slug.toLowerCase().includes(q) ||
+          (p.productCode && p.productCode.toLowerCase().includes(q)) ||
           p.category.toLowerCase().includes(q) ||
           p.tagline.toLowerCase().includes(q)
       );
@@ -187,7 +188,7 @@ export default function ProductsTable({
                 setSearchQuery(e.target.value);
                 setCurrentPage(1);
               }}
-              placeholder="Search product silhouette, slug..."
+              placeholder="Search product silhouette, code, slug..."
               className="w-full bg-zinc-50 dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl pl-9 pr-3 py-2 text-xs sm:text-sm text-zinc-900 dark:text-white placeholder-zinc-400 focus:outline-none focus:border-black dark:focus:border-[#0088ff] transition"
             />
           </div>
@@ -362,8 +363,13 @@ export default function ProductsTable({
                                 </span>
                               )}
                             </div>
-                            <div className="text-xs font-mono text-zinc-400">
-                              /{product.slug}
+                            <div className="flex items-center gap-1.5 flex-wrap text-xs font-mono">
+                              {product.productCode && (
+                                <span className="bg-[#0088ff]/10 text-[#0088ff] dark:text-[#00a3ff] border border-[#0088ff]/20 px-1.5 py-0.5 rounded font-bold text-[10px] tracking-wide">
+                                  {product.productCode}
+                                </span>
+                              )}
+                              <span className="text-zinc-400">/{product.slug}</span>
                             </div>
                           </div>
                         </div>

@@ -50,6 +50,8 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
     const filtered = products.filter(
       (p) =>
         p.title.toLowerCase().includes(q) ||
+        p.slug.toLowerCase().includes(q) ||
+        (p.productCode && p.productCode.toLowerCase().includes(q)) ||
         p.category.toLowerCase().includes(q) ||
         p.fit.toLowerCase().includes(q) ||
         p.description.toLowerCase().includes(q)

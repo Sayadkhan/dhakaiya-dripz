@@ -396,6 +396,7 @@ export default function AdminPage() {
         categories={categories}
         colors={colors}
         sizes={sizes}
+        existingProducts={products}
       />
 
       {/* Confirm Delete Product Modal */}

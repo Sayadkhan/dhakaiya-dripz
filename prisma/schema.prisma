@@ -85,6 +85,7 @@ model Product {
   id             String          @id @default(cuid())
   title          String
   slug           String          @unique
+  productCode    String?
   description    String
   basePrice      Float
   salePrice      Float?

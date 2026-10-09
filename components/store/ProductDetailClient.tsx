@@ -217,7 +217,7 @@ export default function ProductDetailClient({
             
             {/* Header / Titles */}
             <div className="space-y-2 border-b border-zinc-200 dark:border-zinc-900 pb-5">
-              <div className="flex items-center gap-2 text-xs">
+              <div className="flex items-center gap-2 text-xs flex-wrap">
                 <span className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-[#00a3ff] font-mono font-bold px-2 py-0.5 rounded uppercase">
                   {product.category}
                 </span>
@@ -225,6 +225,14 @@ export default function ProductDetailClient({
                 <span className="text-zinc-600 dark:text-zinc-400 font-bold uppercase">{product.fit} FIT</span>
                 <span className="text-zinc-400 font-mono">•</span>
                 <span className="text-zinc-600 dark:text-zinc-400 uppercase">{product.gender}</span>
+                {product.productCode && (
+                  <>
+                    <span className="text-zinc-400 font-mono">•</span>
+                    <span className="text-zinc-500 font-mono text-[11px] font-semibold tracking-wider bg-zinc-100 dark:bg-zinc-900 px-1.5 py-0.5 rounded">
+                      CODE: {product.productCode}
+                    </span>
+                  </>
+                )}
               </div>
 
               <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-zinc-950 dark:text-white">

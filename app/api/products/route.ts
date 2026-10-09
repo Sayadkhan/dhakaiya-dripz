@@ -50,7 +50,19 @@ export async function POST(request: NextRequest) {
     }
 
     const products = await readProductsFromFile();
-    const filtered = products.filter((p) => p.id !== product.id && p.slug !== product.slug);
+
+    // Enforce unique slug across different products
+    if (product.slug) {
+      const slugExists = products.some((p) => p.slug === product.slug && p.id !== product.id);
+      if (slugExists) {
+        return NextResponse.json(
+          { success: false, error: `A product with slug "${product.slug}" already exists.` },
+          { status: 409 }
+        );
+      }
+    }
+
+    const filtered = products.filter((p) => p.id !== product.id);
     const updated = [product, ...filtered];
 
     await writeProductsToFile(updated);
@@ -70,6 +82,18 @@ export async function PUT(request: NextRequest) {
     }
 
     const products = await readProductsFromFile();
+
+    // Enforce unique slug across different products
+    if (product.slug) {
+      const slugExists = products.some((p) => p.slug === product.slug && p.id !== product.id);
+      if (slugExists) {
+        return NextResponse.json(
+          { success: false, error: `A product with slug "${product.slug}" already exists.` },
+          { status: 409 }
+        );
+      }
+    }
+
     const updated = products.map((p) => (p.id === product.id ? product : p));
 
     await writeProductsToFile(updated);

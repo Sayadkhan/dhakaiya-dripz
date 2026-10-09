@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useMemo } from "react";
 import {
   X,
   UploadCloud,
@@ -10,9 +10,41 @@ import {
   Loader2,
   Check,
   Package,
+  AlertCircle,
+  Hash,
+  Link2,
+  Sparkles,
 } from "lucide-react";
 import { ProductItem } from "@/lib/mock-data";
 import { CategoryItem, ColorItem } from "@/context/ProductContext";
+
+function slugify(text: string): string {
+  return text
+    .toLowerCase()
+    .trim()
+    .replace(/[^\w\s-]/g, "")
+    .replace(/[\s_-]+/g, "-")
+    .replace(/^-+|-+$/g, "");
+}
+
+function generateProductCode(category?: string): string {
+  const prefix = "DRIP";
+  const catMap: Record<string, string> = {
+    Pants: "PNT",
+    Shirts: "SHT",
+    "Oversized Tees": "TEE",
+    "Jackets & Hoodies": "JKT",
+    Accessories: "ACC",
+  };
+  const catCode =
+    category && catMap[category]
+      ? catMap[category]
+      : category
+      ? category.slice(0, 3).toUpperCase().replace(/[^A-Z]/g, "")
+      : "GEN";
+  const randomNum = Math.floor(100 + Math.random() * 900);
+  return `${prefix}-${catCode}-${randomNum}`;
+}
 
 interface ProductFormModalProps {
   isOpen: boolean;
@@ -22,6 +54,7 @@ interface ProductFormModalProps {
   categories: CategoryItem[];
   colors: ColorItem[];
   sizes: string[];
+  existingProducts?: ProductItem[];
 }
 
 export default function ProductFormModal({
@@ -32,11 +65,15 @@ export default function ProductFormModal({
   categories,
   colors,
   sizes,
+  existingProducts = [],
 }: ProductFormModalProps) {
   const isEditMode = Boolean(initialProduct);
 
   // Form states
   const [prodTitle, setProdTitle] = useState("");
+  const [prodSlug, setProdSlug] = useState("");
+  const [isSlugManuallyEdited, setIsSlugManuallyEdited] = useState(false);
+  const [prodCode, setProdCode] = useState("");
   const [prodCategory, setProdCategory] = useState("");
   const [prodGender, setProdGender] = useState<"UNISEX" | "MEN" | "WOMEN">("UNISEX");
   const [prodFit, setProdFit] = useState<"OVERSIZED" | "RELAXED" | "REGULAR" | "TAILORED">("OVERSIZED");
@@ -59,6 +96,9 @@ export default function ProductFormModal({
   useEffect(() => {
     if (initialProduct) {
       setProdTitle(initialProduct.title);
+      setProdSlug(initialProduct.slug);
+      setIsSlugManuallyEdited(true);
+      setProdCode(initialProduct.productCode || generateProductCode(initialProduct.category));
       setProdCategory(initialProduct.category);
       setProdGender(initialProduct.gender);
       setProdFit(initialProduct.fit);
@@ -73,6 +113,9 @@ export default function ProductFormModal({
       setSelectedProdSizes(initialProduct.sizes || []);
     } else {
       setProdTitle("");
+      setProdSlug("");
+      setIsSlugManuallyEdited(false);
+      setProdCode(generateProductCode(categories[0]?.name));
       setProdCategory(categories[0]?.name || "Pants");
       setProdGender("UNISEX");
       setProdFit("OVERSIZED");
@@ -87,6 +130,23 @@ export default function ProductFormModal({
       setSelectedProdSizes([]);
     }
   }, [initialProduct, categories]);
+
+  // Handle title change with auto slugification
+  const handleTitleChange = (val: string) => {
+    setProdTitle(val);
+    if (!isSlugManuallyEdited) {
+      setProdSlug(slugify(val));
+    }
+  };
+
+  // Live duplicate slug check
+  const isSlugDuplicate = useMemo(() => {
+    const clean = prodSlug.trim().toLowerCase();
+    if (!clean) return false;
+    return existingProducts.some(
+      (p) => p.slug?.toLowerCase() === clean && p.id !== (initialProduct?.id || "")
+    );
+  }, [prodSlug, existingProducts, initialProduct]);
 
   if (!isOpen) return null;
 
@@ -201,16 +261,19 @@ export default function ProductFormModal({
       return;
     }
 
-    const rawSlug = prodTitle
-      .toLowerCase()
-      .trim()
-      .replace(/[^\w\s-]/g, "")
-      .replace(/[\s_-]+/g, "-")
-      .replace(/^-+|-+$/g, "");
+    const cleanSlug = (prodSlug.trim() || slugify(prodTitle)).toLowerCase();
+    if (!cleanSlug) {
+      alert("Please enter a valid product URL slug");
+      return;
+    }
 
-    const slug = initialProduct
-      ? initialProduct.slug
-      : `${rawSlug || "drip-drop"}-${Date.now().toString().slice(-4)}`;
+    if (isSlugDuplicate) {
+      alert(`The slug "${cleanSlug}" is already in use by another product! Please provide a unique slug.`);
+      return;
+    }
+
+    const finalProductCode =
+      prodCode.trim().toUpperCase() || generateProductCode(prodCategory);
 
     const fallbackImg =
       "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png";
@@ -231,7 +294,8 @@ export default function ProductFormModal({
     const productPayload: ProductItem = {
       id: initialProduct ? initialProduct.id : `drip-prod-${Date.now()}`,
       title: prodTitle.trim(),
-      slug,
+      slug: cleanSlug,
+      productCode: finalProductCode,
       tagline:
         prodTagline.trim() ||
         `${prodFit} silhouette casualwear crafted for Dhaka urban aesthetic.`,
@@ -287,8 +351,8 @@ export default function ProductFormModal({
         {/* Scrollable Form Body */}
         <form onSubmit={handleSubmit} className="flex-1 flex flex-col overflow-hidden">
           <div className="flex-1 overflow-y-auto p-4 sm:p-5 space-y-4">
-            {/* Row 1: Title, Category, Gender, Fit */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+            {/* Row 1: Title & Product Code */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div className="sm:col-span-2">
                 <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-1">
                   Product Title *
@@ -298,18 +362,115 @@ export default function ProductFormModal({
                   required
                   placeholder="e.g. Tactical Pleated Crease Trouser"
                   value={prodTitle}
-                  onChange={(e) => setProdTitle(e.target.value)}
+                  onChange={(e) => handleTitleChange(e.target.value)}
                   className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-[#0088ff]"
                 />
               </div>
 
+              <div>
+                <div className="flex items-center justify-between mb-1">
+                  <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1">
+                    <Hash className="w-3.5 h-3.5 text-[#0088ff] dark:text-[#00a3ff]" />
+                    <span>Product Code *</span>
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setProdCode(generateProductCode(prodCategory))}
+                    title="Generate unique product code"
+                    className="text-[10px] text-[#0088ff] hover:underline flex items-center gap-0.5 font-mono cursor-pointer"
+                  >
+                    <Sparkles className="w-2.5 h-2.5" />
+                    <span>Auto</span>
+                  </button>
+                </div>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. DRIP-PNT-701"
+                  value={prodCode}
+                  onChange={(e) => setProdCode(e.target.value.toUpperCase())}
+                  className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-mono font-bold uppercase text-zinc-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-[#0088ff]"
+                />
+              </div>
+            </div>
+
+            {/* Row 2: URL Slug (Editable & Unique Validated) */}
+            <div className="p-3 bg-zinc-50 dark:bg-zinc-900/60 rounded-2xl border border-zinc-200 dark:border-zinc-800 space-y-1.5">
+              <div className="flex items-center justify-between flex-wrap gap-2">
+                <label className="text-xs font-bold text-zinc-700 dark:text-zinc-300 flex items-center gap-1.5">
+                  <Link2 className="w-3.5 h-3.5 text-[#0088ff] dark:text-[#00a3ff]" />
+                  <span>URL Slug (Product Link Handle) *</span>
+                </label>
+                <div className="flex items-center gap-2">
+                  {isSlugDuplicate ? (
+                    <span className="text-[11px] font-bold text-red-600 dark:text-red-400 flex items-center gap-1 bg-red-100 dark:bg-red-950/60 px-2 py-0.5 rounded-md border border-red-300 dark:border-red-900">
+                      <AlertCircle className="w-3 h-3" /> Slug already in use!
+                    </span>
+                  ) : prodSlug.trim() ? (
+                    <span className="text-[11px] font-bold text-emerald-600 dark:text-emerald-400 flex items-center gap-1 bg-emerald-100 dark:bg-emerald-950/60 px-2 py-0.5 rounded-md border border-emerald-300 dark:border-emerald-900">
+                      <Check className="w-3 h-3" /> Unique & available
+                    </span>
+                  ) : (
+                    <span className="text-[11px] text-zinc-400">Required</span>
+                  )}
+                  {isSlugManuallyEdited && (
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setIsSlugManuallyEdited(false);
+                        setProdSlug(slugify(prodTitle));
+                      }}
+                      className="text-[11px] font-bold text-[#0088ff] hover:underline cursor-pointer"
+                    >
+                      Reset to Auto
+                    </button>
+                  )}
+                </div>
+              </div>
+
+              <div className={`flex items-center rounded-xl bg-white dark:bg-zinc-950 border overflow-hidden focus-within:ring-2 focus-within:ring-[#0088ff]/20 transition ${
+                isSlugDuplicate
+                  ? "border-red-500 focus-within:border-red-500"
+                  : "border-zinc-200 dark:border-zinc-800 focus-within:border-black dark:focus-within:border-[#0088ff]"
+              }`}>
+                <span className="px-3 py-2 text-[11px] font-mono text-zinc-400 dark:text-zinc-500 bg-zinc-100/80 dark:bg-zinc-900 border-r border-zinc-200 dark:border-zinc-800 select-none shrink-0">
+                  /product/
+                </span>
+                <input
+                  type="text"
+                  required
+                  placeholder="e.g. tactical-pleated-crease-trouser"
+                  value={prodSlug}
+                  onChange={(e) => {
+                    setIsSlugManuallyEdited(true);
+                    setProdSlug(slugify(e.target.value));
+                  }}
+                  className={`flex-1 bg-transparent px-3 py-2 text-xs font-mono font-medium focus:outline-none ${
+                    isSlugDuplicate
+                      ? "text-red-600 dark:text-red-400"
+                      : "text-zinc-900 dark:text-white"
+                  }`}
+                />
+              </div>
+              <p className="text-[10px] text-zinc-500 font-mono">
+                Auto-generates from Product Title. You can customize it manually. Must be unique across all products.
+              </p>
+            </div>
+
+            {/* Row 3: Category, Gender, Structural Fit */}
+            <div className="grid grid-cols-1 sm:grid-cols-3 gap-3">
               <div>
                 <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-1">
                   Category
                 </label>
                 <select
                   value={prodCategory}
-                  onChange={(e) => setProdCategory(e.target.value)}
+                  onChange={(e) => {
+                    setProdCategory(e.target.value);
+                    if (!prodCode || prodCode.startsWith("DRIP-")) {
+                      setProdCode(generateProductCode(e.target.value));
+                    }
+                  }}
                   className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none"
                 >
                   {categories.map((c) => (
@@ -334,10 +495,26 @@ export default function ProductFormModal({
                   <option value="WOMEN">WOMEN</option>
                 </select>
               </div>
+
+              <div>
+                <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-1">
+                  Structural Fit
+                </label>
+                <select
+                  value={prodFit}
+                  onChange={(e) => setProdFit(e.target.value as any)}
+                  className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none"
+                >
+                  <option value="OVERSIZED">OVERSIZED</option>
+                  <option value="RELAXED">RELAXED</option>
+                  <option value="REGULAR">REGULAR</option>
+                  <option value="TAILORED">TAILORED</option>
+                </select>
+              </div>
             </div>
 
-            {/* Row 2: Pricing & Fit */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
+            {/* Row 4: Pricing */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
               <div>
                 <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-1">
                   Base Price (৳ BDT) *
@@ -362,22 +539,6 @@ export default function ProductFormModal({
                   onChange={(e) => setProdSalePrice(e.target.value)}
                   className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-mono font-bold text-zinc-900 dark:text-white focus:outline-none focus:border-black dark:focus:border-[#00a3ff]"
                 />
-              </div>
-
-              <div>
-                <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-1">
-                  Structural Fit
-                </label>
-                <select
-                  value={prodFit}
-                  onChange={(e) => setProdFit(e.target.value as any)}
-                  className="w-full bg-zinc-50 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs font-bold text-zinc-900 dark:text-white focus:outline-none"
-                >
-                  <option value="OVERSIZED">OVERSIZED</option>
-                  <option value="RELAXED">RELAXED</option>
-                  <option value="REGULAR">REGULAR</option>
-                  <option value="TAILORED">TAILORED</option>
-                </select>
               </div>
             </div>
 

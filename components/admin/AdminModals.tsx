@@ -127,8 +127,12 @@ export function AddCategoryModal({
         body: formData,
       });
 
-      const data = await res.json();
-      if (data.urls && data.urls.length > 0) {
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {}
+
+      if (res.ok && data?.urls && data.urls.length > 0) {
         setCatImage(data.urls[0]);
       } else {
         // Fallback: Read file locally as Data URL

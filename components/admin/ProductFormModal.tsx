@@ -94,11 +94,22 @@ export default function ProductFormModal({
   const handleFilesSelected = async (files: FileList | null) => {
     if (!files || files.length === 0) return;
 
+    const validFiles: File[] = [];
+    for (let i = 0; i < files.length; i++) {
+      const f = files[i];
+      if (f.size > 25 * 1024 * 1024) {
+        alert(`File "${f.name}" is larger than 25MB. Please choose a smaller image.`);
+        continue;
+      }
+      validFiles.push(f);
+    }
+    if (validFiles.length === 0) return;
+
     setIsUploading(true);
     try {
       const formData = new FormData();
-      for (let i = 0; i < files.length; i++) {
-        formData.append("files", files[i]);
+      for (let i = 0; i < validFiles.length; i++) {
+        formData.append("files", validFiles[i]);
       }
 
       const res = await fetch("/api/upload", {
@@ -106,15 +117,26 @@ export default function ProductFormModal({
         body: formData,
       });
 
-      const data = await res.json();
-      if (data.urls && data.urls.length > 0) {
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {
+        // Response was not JSON
+      }
+
+      if (res.ok && data?.urls && data.urls.length > 0) {
         setProdImages((prev) => [...prev, ...data.urls]);
       } else {
-        alert("Upload failed. Please check file format.");
+        const errorMsg =
+          data?.error ||
+          (res.status === 413
+            ? "File size exceeds server upload limits."
+            : `Upload failed (Status ${res.status || "Unknown"}). Please check image format.`);
+        alert(errorMsg);
       }
-    } catch (err) {
+    } catch (err: any) {
       console.error("Upload error:", err);
-      alert("Error uploading images. Please try again.");
+      alert(err?.message || "Error uploading images. Please try again.");
     } finally {
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = "";
@@ -170,6 +192,10 @@ export default function ProductFormModal({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    if (isUploading) {
+      alert("Images are currently uploading. Please wait a moment until upload finishes.");
+      return;
+    }
     if (!prodTitle.trim()) {
       alert("Please enter product title");
       return;

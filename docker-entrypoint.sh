@@ -8,7 +8,8 @@ if [ -n "$DATABASE_URL" ]; then
 fi
 
 # Ensure data and upload directories exist with proper write permissions
-mkdir -p /app/data /app/public/uploads
+mkdir -p /app/data /app/public/uploads /app/data/uploads
+chmod -R 777 /app/data /app/public/uploads 2>/dev/null || true
 
 echo "=> Starting Dhakaiya Dripz Next.js Production Server on port ${PORT:-3000}..."
 exec "$@"

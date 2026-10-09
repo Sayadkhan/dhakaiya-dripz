@@ -208,12 +208,17 @@ export default function BrandingManager({
         body: formData,
       });
 
-      const data = await res.json();
-      if (data.urls && data.urls.length > 0) {
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {}
+
+      if (res.ok && data?.urls && data.urls.length > 0) {
         onUpdateLogo(data.urls[0]);
         onTriggerToast("Brand logo uploaded and applied successfully across entire store!");
       } else {
-        alert("Logo upload failed. Please try a valid image file.");
+        const errorMsg = data?.error || `Logo upload failed (Status ${res.status || "Unknown"}). Please try a valid image file.`;
+        alert(errorMsg);
       }
     } catch (err) {
       console.error("Logo upload error:", err);

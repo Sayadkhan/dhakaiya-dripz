@@ -41,7 +41,7 @@ export interface StoreSettings {
 }
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
-  logoUrl: "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png",
+  logoUrl: "/uploads/dhakaiya-horizontal-black.png",
   deliveryInsideDhaka: 80,
   deliveryOutsideDhaka: 150,
   freeShippingThreshold: 3000,
@@ -211,11 +211,16 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       }
 
       const savedLogo = localStorage.getItem("dhakaiya_custom_logo");
-      if (savedLogo && !savedLogo.includes("shadcn.png")) {
+      if (
+        savedLogo &&
+        !savedLogo.includes("shadcn.png") &&
+        !savedLogo.includes("drip-062eabdb") &&
+        savedLogo !== "/uploads/Dhakaiya Dripz-02.png"
+      ) {
         setCustomLogoUrl(savedLogo);
       } else {
-        setCustomLogoUrl("/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png");
-        localStorage.setItem("dhakaiya_custom_logo", "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png");
+        setCustomLogoUrl("/uploads/dhakaiya-horizontal-black.png");
+        localStorage.setItem("dhakaiya_custom_logo", "/uploads/dhakaiya-horizontal-black.png");
       }
     } catch {
       // Fallback
@@ -231,9 +236,17 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
           const s = data.settings;
           setSettings(s);
           localStorage.setItem("dhakaiya_store_settings", JSON.stringify(s));
-          if (s.logoUrl && !s.logoUrl.includes("shadcn.png")) {
+          if (
+            s.logoUrl &&
+            !s.logoUrl.includes("shadcn.png") &&
+            !s.logoUrl.includes("drip-062eabdb") &&
+            s.logoUrl !== "/uploads/Dhakaiya Dripz-02.png"
+          ) {
             setCustomLogoUrl(s.logoUrl);
             localStorage.setItem("dhakaiya_custom_logo", s.logoUrl);
+          } else {
+            setCustomLogoUrl("/uploads/dhakaiya-horizontal-black.png");
+            localStorage.setItem("dhakaiya_custom_logo", "/uploads/dhakaiya-horizontal-black.png");
           }
         }
       })

@@ -21,3 +21,7 @@ body {
   color: var(--foreground);
   transition: background-color 0.25s ease, color 0.25s ease;
 }
+
+.font-serif-brand {
+  font-family: var(--font-serif-brand), "Playfair Display", "Didot", "Bodoni MT", Georgia, serif;
+}

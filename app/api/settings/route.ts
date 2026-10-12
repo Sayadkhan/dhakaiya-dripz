@@ -29,7 +29,7 @@ export interface StoreSettings {
 }
 
 const DEFAULT_STORE_SETTINGS: StoreSettings = {
-  logoUrl: "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png",
+  logoUrl: "/uploads/dhakaiya-horizontal-black.png",
   deliveryInsideDhaka: 80,
   deliveryOutsideDhaka: 150,
   freeShippingThreshold: 3000,

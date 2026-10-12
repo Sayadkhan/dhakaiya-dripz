@@ -36,7 +36,7 @@ export default function ProductDetailWrapper({ slug }: { slug: string }) {
         <div className="w-16 h-16 rounded-full bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center mb-4 shadow-sm">
           <ShoppingBag className="w-8 h-8 text-zinc-400" />
         </div>
-        <span className="font-mono text-xs uppercase tracking-widest text-[#0066ff] dark:text-[#00a3ff] font-bold mb-2">
+        <span className="font-mono text-xs uppercase tracking-widest text-zinc-500 font-bold mb-2">
           Piece Unavailable
         </span>
         <h1 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-zinc-950 dark:text-white mb-3">
@@ -47,7 +47,7 @@ export default function ProductDetailWrapper({ slug }: { slug: string }) {
         </p>
         <Link
           href="/shop"
-          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-xs uppercase tracking-wider transition shadow-lg shadow-[#0088ff]/25"
+          className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase tracking-wider transition shadow-lg"
         >
           <ArrowLeft className="w-4 h-4" />
           <span>Explore All Drops</span>

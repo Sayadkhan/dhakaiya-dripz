@@ -65,18 +65,18 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
         {/* Top Badges */}
         <div className="absolute top-3 left-3 flex flex-col gap-1.5 z-10">
           {product.isNewDrop && (
-            <span className="inline-flex items-center gap-1 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md">
-              <Zap className="w-3 h-3" /> New Drop
+            <span className="inline-flex items-center gap-1 bg-black text-white font-black text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full border border-zinc-800 shadow-md">
+              <Zap className="w-3 h-3 fill-white text-white" /> New Drop
             </span>
           )}
           {hasDiscount && (
-            <span className="bg-red-600 text-white font-black text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md">
+            <span className="bg-black text-white font-black text-[10px] uppercase tracking-wider px-2 py-0.5 rounded-full shadow-md border border-zinc-800">
               -{discountPercent}%
             </span>
           )}
           {isLowStock && (
-            <span className="inline-flex items-center gap-1 bg-amber-500 text-black font-bold text-[10px] px-2 py-0.5 rounded-full shadow-md">
-              <Flame className="w-3 h-3" /> Only {totalStock} Left
+            <span className="inline-flex items-center gap-1 bg-zinc-900 text-white font-bold text-[10px] px-2 py-0.5 rounded-full shadow-md border border-zinc-700">
+              <Flame className="w-3 h-3 text-white" /> Only {totalStock} Left
             </span>
           )}
         </div>
@@ -90,8 +90,8 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
           }}
           className={`absolute top-3 right-3 p-2 rounded-full backdrop-blur-md transition-all z-10 ${
             isLiked
-              ? "bg-red-600 text-white shadow-lg"
-              : "bg-white/80 dark:bg-black/50 text-zinc-700 dark:text-white hover:bg-white dark:hover:bg-black/80 hover:text-red-600 shadow-sm"
+              ? "bg-black text-white shadow-lg"
+              : "bg-white/80 dark:bg-black/50 text-zinc-700 dark:text-white hover:bg-white dark:hover:bg-black/80 hover:text-black shadow-sm"
           }`}
           aria-label="Add to wishlist"
         >
@@ -115,7 +115,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
                     className={`flex-1 min-w-[28px] py-1 text-center text-xs font-mono font-bold rounded transition ${
                       outOfStock
                         ? "line-through opacity-30 text-zinc-400 dark:text-zinc-600 cursor-not-allowed bg-zinc-100 dark:bg-zinc-900"
-                        : "bg-zinc-100 dark:bg-zinc-800 hover:bg-[#00a3ff] hover:text-black text-zinc-900 dark:text-white"
+                        : "bg-zinc-100 dark:bg-zinc-800 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-zinc-900 dark:text-white"
                     }`}
                   >
                     {s.size}
@@ -137,7 +137,7 @@ export default function ProductCard({ product, priority = false }: ProductCardPr
             </span>
           </div>
 
-          <Link href={`/product/${product.slug}`} className="block group-hover:text-[#0066ff] dark:group-hover:text-[#00a3ff] transition">
+          <Link href={`/product/${product.slug}`} className="block group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition">
             <h3 className="font-bold text-sm text-zinc-950 dark:text-zinc-100 line-clamp-1">
               {product.title}
             </h3>

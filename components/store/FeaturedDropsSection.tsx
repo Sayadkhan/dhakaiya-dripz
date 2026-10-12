@@ -29,7 +29,7 @@ export default function FeaturedDropsSection() {
     <section className="py-16 sm:py-20 border-b border-zinc-200 dark:border-zinc-900 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 w-full">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
         <div>
-          <div className="text-[#0066ff] dark:text-[#00a3ff] font-mono text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5">
+          <div className="text-zinc-500 font-mono text-xs font-bold uppercase tracking-wider mb-1 flex items-center gap-1.5">
             <TrendingUp className="w-3.5 h-3.5" /> High-Rotation Staples
           </div>
           <h2 className="text-2xl sm:text-3xl font-black uppercase tracking-tight text-zinc-950 dark:text-white">
@@ -53,11 +53,11 @@ export default function FeaturedDropsSection() {
         </div>
       ) : (
         <div className="text-center py-20 px-4 bg-zinc-50 dark:bg-zinc-900/40 rounded-3xl border border-zinc-200 dark:border-zinc-800/80 space-y-5">
-          <div className="w-16 h-16 rounded-2xl bg-[#0088ff]/10 border border-[#00a3ff]/20 mx-auto flex items-center justify-center text-[#0066ff] dark:text-[#00a3ff]">
+          <div className="w-16 h-16 rounded-2xl bg-zinc-100 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 mx-auto flex items-center justify-center text-black dark:text-white">
             <Sparkles className="w-8 h-8" />
           </div>
           <div className="space-y-2 max-w-md mx-auto">
-            <div className="text-[11px] font-mono uppercase tracking-widest text-[#00a3ff] font-bold">
+            <div className="text-[11px] font-mono uppercase tracking-widest text-zinc-500 dark:text-zinc-400 font-bold">
               VAULT STATUS: IN PREPARATION
             </div>
             <h3 className="text-xl sm:text-2xl font-black uppercase tracking-tight text-zinc-950 dark:text-white">
@@ -70,7 +70,7 @@ export default function FeaturedDropsSection() {
           <div className="pt-2">
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-full hover:from-[#0052cc] hover:to-[#0088ff] transition shadow-md shadow-[#0088ff]/20"
+              className="inline-flex items-center gap-2 bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full transition shadow-md"
             >
               <span>Explore Catalog Matrix</span>
               <ArrowRight className="w-4 h-4" />

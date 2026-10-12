@@ -118,48 +118,52 @@ export default function AdminSidebar({
           <div className="flex items-center gap-2.5 overflow-hidden">
             {collapsed && !mobileOpen ? (
               <div
-                className="w-10 h-10 rounded-xl bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 flex items-center justify-center p-1 shadow-xs cursor-pointer"
+                className="w-10 h-10 rounded-xl bg-zinc-950 dark:bg-zinc-900 border border-zinc-800 flex items-center justify-center p-2 shadow-xs cursor-pointer group"
                 onClick={() => setCollapsed(false)}
                 title="Expand Dhakaiya Dripz Menu"
               >
-                {customLogoUrl && !logoError ? (
-                  /* eslint-disable-next-line @next/next/no-img-element */
-                  <img
-                    src={customLogoUrl}
-                    alt="Logo"
-                    onError={() => setLogoError(true)}
-                    className="w-full h-full object-contain"
-                  />
-                ) : (
-                  <span className="font-black text-xs text-[#00a3ff]">DD</span>
-                )}
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src="/uploads/dhakaiya-crest-white.png"
+                  alt="DD Crest"
+                  className="w-full h-full object-contain group-hover:scale-110 transition"
+                />
               </div>
             ) : (
               <div className="flex items-center gap-2 py-1">
                 {customLogoUrl && !logoError ? (
                   <div className="flex flex-col">
-                    {/* eslint-disable-next-line @next/next/no-img-element */ }
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
                     <img
-                      src={customLogoUrl}
+                      src={
+                        customLogoUrl.includes("Dhakaiya Dripz-02")
+                          ? "/uploads/dhakaiya-horizontal-black.png"
+                          : customLogoUrl
+                      }
                       alt="Dhakaiya Dripz"
                       onError={() => setLogoError(true)}
-                      className="h-11 sm:h-12 w-auto max-w-[170px] object-contain drop-shadow-sm filter"
+                      className="h-10 sm:h-11 w-auto max-w-[170px] object-contain dark:brightness-0 dark:invert"
                     />
-                    <span className="text-[9px] text-[#00a3ff] font-mono tracking-widest uppercase font-bold pl-1 mt-0.5 flex items-center gap-1">
-                      <span className="w-1.5 h-1.5 rounded-full bg-[#00a3ff] animate-pulse" />
+                    <span className="text-[9px] text-zinc-500 font-mono tracking-widest uppercase font-bold pl-1 mt-0.5 flex items-center gap-1">
+                      <span className="w-1.5 h-1.5 rounded-full bg-black dark:bg-white animate-pulse" />
                       Control Center
                     </span>
                   </div>
                 ) : (
                   <div className="flex items-center gap-2.5">
-                    <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-[#0066ff] to-[#00d2ff] text-white flex items-center justify-center font-black text-xs shadow-md shadow-[#0088ff]/25">
-                      DD
+                    <div className="w-9 h-9 rounded-xl bg-black dark:bg-white p-1.5 flex items-center justify-center shadow-xs">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src="/uploads/dhakaiya-crest-white.png"
+                        alt="DD"
+                        className="w-full h-full object-contain dark:brightness-0"
+                      />
                     </div>
                     <div>
-                      <div className="font-black text-base tracking-tight text-zinc-950 dark:text-white uppercase leading-none">
-                        DHAKAIYA<span className="text-transparent bg-clip-text bg-gradient-to-r from-[#0088ff] to-[#00d2ff]">DRIPZ</span>
+                      <div className="font-serif-brand font-bold text-base tracking-tight text-zinc-950 dark:text-white leading-none">
+                        Dhakaiya <span className="font-sans font-light text-xs opacity-75">Dripz</span>
                       </div>
-                      <span className="text-[10px] text-zinc-400 font-mono tracking-wider uppercase block mt-1">
+                      <span className="text-[9px] text-zinc-500 font-mono tracking-wider uppercase block mt-1">
                         Control Center
                       </span>
                     </div>

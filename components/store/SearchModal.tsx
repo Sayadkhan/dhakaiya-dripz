@@ -97,7 +97,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
           {query.trim() === "" ? (
             <div className="space-y-4 py-2">
               <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-zinc-500 dark:text-zinc-400">
-                <Sparkles className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" /> Popular Searches
+                <Sparkles className="w-3.5 h-3.5 text-black dark:text-white" /> Popular Searches
               </div>
               <div className="flex flex-wrap gap-2">
                 {[
@@ -110,7 +110,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                   <button
                     key={term}
                     onClick={() => setQuery(term)}
-                    className="text-xs bg-zinc-100 dark:bg-zinc-900 hover:bg-zinc-200 dark:hover:bg-zinc-800 text-zinc-800 dark:text-zinc-300 hover:text-black dark:hover:text-white px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 transition font-medium"
+                    className="text-xs bg-zinc-100 dark:bg-zinc-900 hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black text-zinc-800 dark:text-zinc-300 px-3 py-1.5 rounded-full border border-zinc-200 dark:border-zinc-800 transition font-bold"
                   >
                     {term}
                   </button>
@@ -139,7 +139,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                     />
                   </div>
                   <div className="flex-1 min-w-0">
-                    <div className="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-[#0066ff] dark:group-hover:text-[#00a3ff] transition truncate">
+                    <div className="text-sm font-bold text-zinc-900 dark:text-white group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition truncate">
                       {product.title}
                     </div>
                     <div className="text-xs text-zinc-500 flex items-center gap-2 mt-0.5">
@@ -150,7 +150,7 @@ export default function SearchModal({ isOpen, onClose }: SearchModalProps) {
                       </span>
                     </div>
                   </div>
-                  <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-[#0066ff] dark:group-hover:text-[#00a3ff] group-hover:translate-x-1 transition" />
+                  <ArrowRight className="w-4 h-4 text-zinc-400 group-hover:text-black dark:group-hover:text-white group-hover:translate-x-1 transition" />
                 </Link>
               ))}
             </div>

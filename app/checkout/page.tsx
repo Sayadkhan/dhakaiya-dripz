@@ -126,17 +126,17 @@ export default function CheckoutPage() {
   // If order was placed successfully:
   if (placedOrder) {
     return (
-      <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#0088ff] selection:text-white">
+      <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black">
         <Navbar />
 
         <main className="flex-1 max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-20 w-full text-center">
           <div className="bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-800 rounded-3xl p-6 sm:p-12 shadow-2xl space-y-6">
-            <div className="w-16 h-16 bg-[#0088ff]/15 border border-[#00a3ff] rounded-full flex items-center justify-center mx-auto text-[#0066ff] dark:text-[#00a3ff]">
+            <div className="w-16 h-16 bg-black text-white dark:bg-white dark:text-black rounded-full flex items-center justify-center mx-auto border-2 border-black dark:border-white">
               <CheckCircle2 className="w-9 h-9" />
             </div>
 
             <div className="space-y-2">
-              <span className="inline-block bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow-xs">
+              <span className="inline-block bg-black text-white dark:bg-white dark:text-black font-extrabold text-[10px] uppercase tracking-wider px-3 py-1 rounded-full shadow-xs">
                 COD ORDER RECEIVED
               </span>
               <h1 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-zinc-950 dark:text-white">
@@ -151,7 +151,7 @@ export default function CheckoutPage() {
             <div className="bg-white dark:bg-zinc-950 p-5 rounded-2xl border border-zinc-200 dark:border-zinc-800 text-left space-y-3 font-mono text-xs shadow-xs">
               <div className="flex justify-between border-b border-zinc-100 dark:border-zinc-900 pb-2">
                 <span className="text-zinc-500">Order ID:</span>
-                <span className="text-zinc-950 dark:text-[#00a3ff] font-black text-sm">{placedOrder.orderNumber}</span>
+                <span className="text-zinc-950 dark:text-white font-black text-sm">{placedOrder.orderNumber}</span>
               </div>
               <div className="flex justify-between border-b border-zinc-100 dark:border-zinc-900 pb-2">
                 <span className="text-zinc-500">Payment:</span>
@@ -167,18 +167,18 @@ export default function CheckoutPage() {
               </div>
               <div className="flex justify-between pt-1 text-sm font-bold">
                 <span className="text-zinc-900 dark:text-white">Amount Due on Delivery:</span>
-                <span className="text-zinc-950 dark:text-[#00a3ff] text-base font-black">{formatPrice(placedOrder.totalAmount)}</span>
+                <span className="text-zinc-950 dark:text-white text-base font-black">{formatPrice(placedOrder.totalAmount)}</span>
               </div>
             </div>
 
             {/* Timeline */}
             <div className="p-4 rounded-2xl bg-zinc-100 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 text-left text-xs space-y-3">
               <div className="font-bold text-zinc-900 dark:text-white uppercase tracking-wider text-[11px] flex items-center gap-1.5">
-                <Clock className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" /> What Happens Next?
+                <Clock className="w-3.5 h-3.5 text-black dark:text-white" /> What Happens Next?
               </div>
               <div className="space-y-2 text-zinc-600 dark:text-zinc-400">
                 <div className="flex items-center gap-2">
-                  <span className="w-5 h-5 rounded-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-bold text-[10px] flex items-center justify-center">1</span>
+                  <span className="w-5 h-5 rounded-full bg-black text-white dark:bg-white dark:text-black font-bold text-[10px] flex items-center justify-center">1</span>
                   <span><strong>Verification Call:</strong> Expect a call from {settings?.phone || "our helpline"} within 2 business hours.</span>
                 </div>
                 <div className="flex items-center gap-2">
@@ -195,7 +195,7 @@ export default function CheckoutPage() {
             <div className="pt-2 flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 href="/shop"
-                className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-extrabold text-xs uppercase tracking-wider px-8 py-3.5 rounded-xl transition shadow-lg shadow-[#0088ff]/25 text-center"
+                className="bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase tracking-wider px-8 py-3.5 rounded-xl transition shadow-lg text-center"
               >
                 Continue Shopping
               </Link>
@@ -243,7 +243,7 @@ export default function CheckoutPage() {
             </p>
             <Link
               href="/shop"
-              className="inline-flex bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-xs uppercase px-6 py-3 rounded-full shadow-lg shadow-[#0088ff]/25 transition"
+              className="inline-flex bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase px-6 py-3 rounded-full shadow-lg transition"
             >
               Shop New Drops
             </Link>
@@ -341,13 +341,13 @@ export default function CheckoutPage() {
                         onClick={() => setDeliveryZone("INSIDE_DHAKA")}
                         className={`p-3.5 rounded-xl border cursor-pointer transition ${
                           deliveryZone === "INSIDE_DHAKA"
-                            ? "border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 text-zinc-950 dark:text-white"
+                            ? "border-black bg-zinc-100 dark:border-white dark:bg-zinc-900 text-zinc-950 dark:text-white"
                             : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:border-zinc-400"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-sm text-zinc-950 dark:text-white">Inside Dhaka</span>
-                          <span className="font-mono text-xs font-bold text-[#0066ff] dark:text-[#00a3ff]">
+                          <span className="font-mono text-xs font-black text-black dark:text-white">
                             {subtotal >= freeShippingThreshold ? "FREE" : `৳${deliveryInsideDhaka} BDT`}
                           </span>
                         </div>
@@ -358,13 +358,13 @@ export default function CheckoutPage() {
                         onClick={() => setDeliveryZone("OUTSIDE_DHAKA")}
                         className={`p-3.5 rounded-xl border cursor-pointer transition ${
                           deliveryZone === "OUTSIDE_DHAKA"
-                            ? "border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 text-zinc-950 dark:text-white"
+                            ? "border-black bg-zinc-100 dark:border-white dark:bg-zinc-900 text-zinc-950 dark:text-white"
                             : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-zinc-500 hover:border-zinc-400"
                         }`}
                       >
                         <div className="flex items-center justify-between">
                           <span className="font-bold text-sm text-zinc-950 dark:text-white">Outside Dhaka</span>
-                          <span className="font-mono text-xs font-bold text-[#0066ff] dark:text-[#00a3ff]">
+                          <span className="font-mono text-xs font-black text-black dark:text-white">
                             {subtotal >= freeShippingThreshold ? "FREE" : `৳${deliveryOutsideDhaka} BDT`}
                           </span>
                         </div>
@@ -419,14 +419,14 @@ export default function CheckoutPage() {
                     <span>3. Payment Protocol</span>
                   </div>
 
-                  <div className="p-4 rounded-xl border border-[#00a3ff] bg-zinc-100 dark:bg-[#0088ff]/15 flex items-start gap-3">
-                    <div className="w-5 h-5 rounded-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
+                  <div className="p-4 rounded-xl border border-black dark:border-white bg-zinc-100 dark:bg-zinc-900 flex items-start gap-3">
+                    <div className="w-5 h-5 rounded-full bg-black text-white dark:bg-white dark:text-black font-black text-xs flex items-center justify-center flex-shrink-0 mt-0.5">
                       ✓
                     </div>
                     <div>
                       <div className="text-sm font-bold text-zinc-950 dark:text-white flex items-center gap-2">
                         <span>Cash on Delivery (ক্যাশ অন ডেলিভারি)</span>
-                        <span className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-[9px] px-1.5 py-0.2 rounded uppercase">
+                        <span className="bg-black text-white dark:bg-white dark:text-black font-extrabold text-[9px] px-1.5 py-0.2 rounded uppercase">
                           No Prepayment
                         </span>
                       </div>
@@ -441,7 +441,7 @@ export default function CheckoutPage() {
                 <button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] disabled:bg-zinc-300 text-white font-black text-base uppercase tracking-wider py-4 rounded-2xl flex items-center justify-center gap-2 shadow-xl shadow-[#0088ff]/25 transition transform hover:-translate-y-0.5"
+                  className="w-full bg-black hover:bg-zinc-800 disabled:bg-zinc-300 text-white font-black text-base uppercase tracking-wider py-4 rounded-2xl flex items-center justify-center gap-2 shadow-xl transition transform hover:-translate-y-0.5"
                 >
                   {isSubmitting ? (
                     <span className="flex items-center gap-2">
@@ -511,7 +511,7 @@ export default function CheckoutPage() {
                   </div>
                   <div className="flex justify-between text-base font-black text-zinc-950 dark:text-white pt-2 border-t border-zinc-200 dark:border-zinc-800">
                     <span>Payable on Delivery</span>
-                    <span className="font-mono text-zinc-950 dark:text-[#00a3ff] text-lg">
+                    <span className="font-mono text-zinc-950 dark:text-white text-lg">
                       {formatPrice(totalAmount)}
                     </span>
                   </div>
@@ -519,7 +519,7 @@ export default function CheckoutPage() {
 
                 <div className="p-3 bg-white dark:bg-zinc-950 rounded-xl border border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500 space-y-1">
                   <div className="text-zinc-900 dark:text-zinc-400 font-bold flex items-center gap-1">
-                    <ShieldCheck className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" /> 100% Risk Free
+                    <ShieldCheck className="w-3.5 h-3.5 text-black dark:text-white" /> 100% Risk Free
                   </div>
                   <p>You only hand over cash when the courier hands the parcel to you.</p>
                 </div>

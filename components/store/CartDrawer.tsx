@@ -63,7 +63,7 @@ export default function CartDrawer() {
           {/* Header */}
           <div className="p-4 sm:p-5 border-b border-zinc-200 dark:border-zinc-900 flex items-center justify-between bg-zinc-50 dark:bg-zinc-900/40">
             <div className="flex items-center gap-2">
-              <ShoppingBag className="w-5 h-5 text-[#0066ff] dark:text-[#00a3ff]" />
+              <ShoppingBag className="w-5 h-5 text-black dark:text-white" />
               <h2 className="text-base font-bold uppercase tracking-wider text-zinc-950 dark:text-white">
                 Shopping Bag ({items.reduce((s, i) => s + i.quantity, 0)})
               </h2>
@@ -81,22 +81,22 @@ export default function CartDrawer() {
           <div className="bg-zinc-100/70 dark:bg-zinc-900/60 p-3.5 border-b border-zinc-200 dark:border-zinc-900 text-xs">
             <div className="flex items-center justify-between mb-1.5 font-medium">
               <span className="flex items-center gap-1.5 text-zinc-700 dark:text-zinc-300">
-                <Truck className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" />
+                <Truck className="w-4 h-4 text-black dark:text-white" />
                 {amountNeededForFreeShipping > 0 ? (
                   <span>
                     Add <strong className="text-black dark:text-white font-mono">{formatPrice(amountNeededForFreeShipping)}</strong> more for <strong>FREE Delivery</strong>
                   </span>
                 ) : (
-                  <span className="text-[#0088ff] dark:text-[#00a3ff] font-bold">
+                  <span className="text-black dark:text-white font-black">
                     🎉 You unlocked FREE Delivery across Bangladesh!
                   </span>
                 )}
               </span>
-              <span className="font-mono text-zinc-500 dark:text-zinc-400">{progressPercent}%</span>
+              <span className="font-mono text-zinc-500 dark:text-zinc-400 font-bold">{progressPercent}%</span>
             </div>
             <div className="w-full bg-zinc-200 dark:bg-zinc-800 h-1.5 rounded-full overflow-hidden">
               <div
-                className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] h-full transition-all duration-500 rounded-full"
+                className="bg-black dark:bg-white h-full transition-all duration-500 rounded-full"
                 style={{ width: `${progressPercent}%` }}
               />
             </div>
@@ -118,7 +118,7 @@ export default function CartDrawer() {
                 <Link
                   href="/shop"
                   onClick={closeCart}
-                  className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg shadow-[#0088ff]/25 transition"
+                  className="bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full shadow-lg transition"
                 >
                   Shop New Drops
                 </Link>
@@ -262,7 +262,7 @@ export default function CartDrawer() {
                 </div>
                 <div className="flex justify-between text-sm font-bold text-zinc-950 dark:text-white pt-2 border-t border-zinc-200 dark:border-zinc-800">
                   <span>Estimated Total</span>
-                  <span className="font-mono text-zinc-950 dark:text-[#00a3ff] text-base font-black">
+                  <span className="font-mono text-zinc-950 dark:text-white text-base font-black">
                     {formatPrice(totalAmount)}
                   </span>
                 </div>
@@ -272,14 +272,14 @@ export default function CartDrawer() {
               <Link
                 href="/checkout"
                 onClick={closeCart}
-                className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-sm uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 shadow-lg shadow-[#0088ff]/25 transition group"
+                className="w-full bg-black hover:bg-zinc-800 text-white font-black text-sm uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 shadow-lg transition group"
               >
                 <span>Proceed to COD Checkout</span>
                 <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
               </Link>
 
               <div className="flex items-center justify-center gap-1.5 text-[11px] text-zinc-500 text-center">
-                <ShieldCheck className="w-3.5 h-3.5 text-[#0066ff] dark:text-[#00a3ff]" />
+                <ShieldCheck className="w-3.5 h-3.5 text-zinc-700 dark:text-zinc-300" />
                 <span>Pay cash upon parcel delivery | Inspect before you receive</span>
               </div>
             </div>

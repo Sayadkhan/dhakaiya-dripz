@@ -106,8 +106,8 @@ export default function ShopCatalogClient() {
                 onClick={() => updateQuery("category", cat)}
                 className={`text-xs font-bold px-3.5 py-1.5 rounded-full border transition whitespace-nowrap ${
                   selectedCategory.toLowerCase() === cat.toLowerCase()
-                    ? "bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white border-[#00a3ff] shadow-xs font-black"
-                    : "bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-zinc-400 dark:hover:border-zinc-700"
+                    ? "bg-black text-white border-black dark:bg-white dark:text-black dark:border-white shadow-xs font-black"
+                    : "bg-zinc-100 dark:bg-zinc-900 text-zinc-800 dark:text-zinc-300 border-zinc-200 dark:border-zinc-800 hover:border-black dark:hover:border-zinc-600 font-bold"
                 }`}
               >
                 {cat}
@@ -120,7 +120,7 @@ export default function ShopCatalogClient() {
             onClick={() => setIsMobileFilterOpen(true)}
             className="lg:hidden flex items-center gap-2 bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-white text-xs font-bold px-4 py-2 rounded-xl"
           >
-            <SlidersHorizontal className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff]" />
+            <SlidersHorizontal className="w-4 h-4 text-black dark:text-white" />
             <span>Filters {activeFiltersCount > 0 && `(${activeFiltersCount})`}</span>
           </button>
 
@@ -130,7 +130,7 @@ export default function ShopCatalogClient() {
             <select
               value={sortBy}
               onChange={(e) => updateQuery("sort", e.target.value)}
-              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 text-xs font-bold py-1.5 px-3 rounded-xl focus:outline-none focus:border-black dark:focus:border-[#00a3ff]"
+              className="bg-zinc-100 dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-zinc-900 dark:text-zinc-200 text-xs font-bold py-1.5 px-3 rounded-xl focus:outline-none focus:border-black dark:focus:border-white"
             >
               <option value="featured">Sort: Featured</option>
               <option value="price-asc">Price: Low to High</option>
@@ -277,7 +277,7 @@ export default function ShopCatalogClient() {
           {products.length > 0 && (
             <button
               onClick={clearAllFilters}
-              className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-extrabold text-xs uppercase px-5 py-2.5 rounded-full shadow-lg shadow-[#0088ff]/25 transition"
+              className="bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase px-6 py-3 rounded-full shadow-lg transition"
             >
               Reset All Filters
             </button>
@@ -309,7 +309,7 @@ export default function ShopCatalogClient() {
                     }}
                     className={`text-left text-xs py-2 px-3 rounded-lg font-semibold ${
                       selectedCategory.toLowerCase() === cat.toLowerCase()
-                        ? "bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white"
+                        ? "bg-black text-white font-black"
                         : "text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-900"
                     }`}
                   >
@@ -400,7 +400,7 @@ export default function ShopCatalogClient() {
               </button>
               <button
                 onClick={() => setIsMobileFilterOpen(false)}
-                className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] text-white font-black text-xs uppercase py-3 rounded-xl shadow-lg shadow-[#0088ff]/25 transition"
+                className="w-full bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase py-3.5 rounded-xl shadow-lg transition"
               >
                 Apply Filters
               </button>

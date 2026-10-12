@@ -1288,19 +1288,41 @@ export default function BrandingManager({
                     Apply
                   </button>
                 </div>
-                <div className="flex items-center justify-between gap-2 pt-0.5">
-                  <span className="text-[10px] text-zinc-400">Direct CDN / upload link</span>
-                  <button
-                    type="button"
-                    onClick={() => {
-                      onUpdateLogo("/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png");
-                      onTriggerToast("Applied authentic Dhakaiya Dripz brand logo!");
-                    }}
-                    className="px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-[10px] font-bold text-zinc-700 dark:text-zinc-300 hover:text-[#00a3ff] border border-zinc-200 dark:border-zinc-700 transition flex items-center gap-1"
-                  >
-                    <Sparkles className="w-2.5 h-2.5 text-[#0066ff] dark:text-[#00a3ff]" />
-                    <span>Authentic Cyber Logo</span>
-                  </button>
+                <div className="space-y-1.5 pt-1">
+                  <span className="text-[10px] text-zinc-400 block font-medium">Quick Brand Logo Presets</span>
+                  <div className="grid grid-cols-3 gap-1.5">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onUpdateLogo("/uploads/dhakaiya-horizontal-black.png");
+                        onTriggerToast("Applied Horizontal Brand Lockup!");
+                      }}
+                      className="px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-[10px] font-bold text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white border border-zinc-200 dark:border-zinc-700 transition flex items-center justify-center gap-1 text-center"
+                    >
+                      <Sparkles className="w-2.5 h-2.5 text-black dark:text-white" />
+                      <span>Horizontal</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onUpdateLogo("/uploads/dhakaiya-dripz-full.png");
+                        onTriggerToast("Applied Full Stacked Logo!");
+                      }}
+                      className="px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-[10px] font-bold text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white border border-zinc-200 dark:border-zinc-700 transition flex items-center justify-center gap-1 text-center"
+                    >
+                      <span>Full Stack</span>
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        onUpdateLogo("/uploads/dhakaiya-crest-black.png");
+                        onTriggerToast("Applied DD Crest Monogram!");
+                      }}
+                      className="px-2 py-1.5 rounded-lg bg-zinc-100 dark:bg-zinc-800 text-[10px] font-bold text-zinc-700 dark:text-zinc-300 hover:text-black dark:hover:text-white border border-zinc-200 dark:border-zinc-700 transition flex items-center justify-center gap-1 text-center"
+                    >
+                      <span>DD Crest</span>
+                    </button>
+                  </div>
                 </div>
               </div>
 
@@ -1348,15 +1370,23 @@ export default function BrandingManager({
                     {customLogoUrl && !adminLogoLoadError ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
-                        src={customLogoUrl}
+                        src={
+                          customLogoUrl.includes("Dhakaiya Dripz-02") || customLogoUrl.includes("dhakaiya-horizontal-black")
+                            ? "/uploads/dhakaiya-horizontal-white.png"
+                            : customLogoUrl
+                        }
                         alt="Dhakaiya Dripz Logo"
                         onError={() => setAdminLogoLoadError(true)}
-                        className="h-10 w-auto max-w-[170px] object-contain"
+                        className="h-10 w-auto max-w-[170px] object-contain brightness-0 invert"
                       />
                     ) : (
-                      <span className="font-black text-base tracking-tight text-white uppercase">
-                        DHAKAIYA<span className="text-[#00a3ff]">DRIPZ</span>
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="/uploads/dhakaiya-crest-white.png" alt="DD" className="h-6 w-auto" />
+                        <span className="font-serif-brand text-sm tracking-tight text-white">
+                          Dhakaiya <span className="italic">Dripz</span>
+                        </span>
+                      </div>
                     )}
                   </div>
 
@@ -1368,7 +1398,7 @@ export default function BrandingManager({
 
                   <div className="flex items-center space-x-2 text-zinc-400">
                     <Heart className="w-3.5 h-3.5" />
-                    <ShoppingBag className="w-3.5 h-3.5 text-[#00a3ff]" />
+                    <ShoppingBag className="w-3.5 h-3.5 text-white" />
                   </div>
                 </div>
               </div>
@@ -1381,18 +1411,26 @@ export default function BrandingManager({
                     {customLogoUrl && !adminLogoLoadError ? (
                       /* eslint-disable-next-line @next/next/no-img-element */
                       <img
-                        src={customLogoUrl}
+                        src={
+                          customLogoUrl.includes("Dhakaiya Dripz-02")
+                            ? "/uploads/dhakaiya-horizontal-black.png"
+                            : customLogoUrl
+                        }
                         alt="Dhakaiya Dripz Logo"
                         onError={() => setAdminLogoLoadError(true)}
                         className="h-10 w-auto max-w-[170px] object-contain"
                       />
                     ) : (
-                      <span className="font-black text-base tracking-tight text-zinc-950 uppercase">
-                        DHAKAIYA<span className="text-[#0088ff]">DRIPZ</span>
-                      </span>
+                      <div className="flex items-center gap-2">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
+                        <img src="/uploads/dhakaiya-crest-black.png" alt="DD" className="h-6 w-auto" />
+                        <span className="font-serif-brand text-sm tracking-tight text-zinc-950">
+                          Dhakaiya <span className="italic">Dripz</span>
+                        </span>
+                      </div>
                     )}
                   </div>
-                  <span className="text-[10px] text-zinc-400 font-mono">Contrast verification</span>
+                  <span className="text-[10px] text-zinc-400 font-mono">Contrast verified</span>
                 </div>
               </div>
             </div>

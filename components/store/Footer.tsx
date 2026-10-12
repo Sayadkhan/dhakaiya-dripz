@@ -79,7 +79,7 @@ export default function Footer() {
       <div className="border-b border-zinc-200 dark:border-zinc-900">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           <div className="flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[#0066ff] dark:text-[#00a3ff] shadow-xs">
+            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-black dark:text-white shadow-xs">
               <Truck className="w-5 h-5" />
             </div>
             <div>
@@ -93,7 +93,7 @@ export default function Footer() {
           </div>
 
           <div className="flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[#0066ff] dark:text-[#00a3ff] shadow-xs">
+            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-black dark:text-white shadow-xs">
               <ShieldCheck className="w-5 h-5" />
             </div>
             <div>
@@ -105,7 +105,7 @@ export default function Footer() {
           </div>
 
           <div className="flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[#0066ff] dark:text-[#00a3ff] shadow-xs">
+            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-black dark:text-white shadow-xs">
               <RotateCcw className="w-5 h-5" />
             </div>
             <div>
@@ -117,7 +117,7 @@ export default function Footer() {
           </div>
 
           <div className="flex items-start gap-3.5">
-            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-[#0066ff] dark:text-[#00a3ff] shadow-xs">
+            <div className="p-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 text-black dark:text-white shadow-xs">
               <PhoneCall className="w-5 h-5" />
             </div>
             <div>
@@ -134,19 +134,52 @@ export default function Footer() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 grid grid-cols-1 md:grid-cols-5 gap-8">
         {/* Brand Column & Social Links */}
         <div className="md:col-span-2 space-y-4">
-          <Link href="/" className="inline-block">
+          <Link href="/" className="inline-block group" aria-label="Dhakaiya Dripz Home">
             {customLogoUrl && !logoLoadError ? (
-              /* eslint-disable-next-line @next/next/no-img-element */
-              <img
-                src={customLogoUrl}
-                alt="Dhakaiya Dripz Logo"
-                onError={() => setLogoLoadError(true)}
-                className="h-10 sm:h-12 w-auto max-w-[200px] object-contain drop-shadow-[0_2px_10px_rgba(0,163,255,0.25)]"
-              />
+              <div className="relative">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={
+                    customLogoUrl.includes("Dhakaiya Dripz-02")
+                      ? "/uploads/dhakaiya-horizontal-black.png"
+                      : customLogoUrl
+                  }
+                  alt="Dhakaiya Dripz"
+                  onError={() => setLogoLoadError(true)}
+                  className="h-12 sm:h-14 w-auto max-w-[220px] object-contain block dark:hidden transition-transform duration-300 group-hover:scale-105"
+                />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img
+                  src={
+                    customLogoUrl.includes("Dhakaiya Dripz-02") || customLogoUrl.includes("dhakaiya-horizontal-black")
+                      ? "/uploads/dhakaiya-horizontal-white.png"
+                      : customLogoUrl
+                  }
+                  alt="Dhakaiya Dripz"
+                  className="h-12 sm:h-14 w-auto max-w-[220px] object-contain hidden dark:block transition-transform duration-300 group-hover:scale-105 dark:brightness-0 dark:invert"
+                />
+              </div>
             ) : (
-              <span className="font-black text-2xl tracking-tighter text-zinc-950 dark:text-white uppercase">
-                DHAKAIYA<span className="bg-gradient-to-r from-[#0088ff] to-[#00d2ff] bg-clip-text text-transparent">DRIPZ</span>
-              </span>
+              <div className="flex items-center gap-2.5">
+                <img
+                  src="/uploads/dhakaiya-crest-black.png"
+                  alt="DD"
+                  className="h-9 w-auto block dark:hidden"
+                />
+                <img
+                  src="/uploads/dhakaiya-crest-white.png"
+                  alt="DD"
+                  className="h-9 w-auto hidden dark:block"
+                />
+                <div className="flex flex-col leading-none">
+                  <span className="font-serif-brand text-2xl font-bold tracking-tight text-zinc-950 dark:text-white">
+                    Dhakaiya
+                  </span>
+                  <span className="font-serif-brand text-xs italic tracking-widest text-zinc-500">
+                    Dripz
+                  </span>
+                </div>
+              </div>
             )}
           </Link>
           <p className="text-zinc-500 max-w-sm leading-relaxed">
@@ -157,7 +190,7 @@ export default function Footer() {
           <div className="pt-2 space-y-2">
             <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-950 dark:text-white flex items-center gap-1.5">
               <span>Official Channels</span>
-              <span className="w-1.5 h-1.5 rounded-full bg-[#00a3ff] animate-pulse" />
+              <span className="w-1.5 h-1.5 rounded-full bg-black dark:bg-white animate-pulse" />
             </div>
             <div className="flex flex-wrap items-center gap-2">
               {social.facebook?.trim() && (
@@ -242,11 +275,11 @@ export default function Footer() {
 
           <div className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400 pt-1">
             <div className="flex items-center gap-2">
-              <MapPin className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff] shrink-0" />
+              <MapPin className="w-4 h-4 text-zinc-800 dark:text-zinc-200 shrink-0" />
               <span>{settings?.address || "Gulshan 1 / Banani Hub, Dhaka, Bangladesh"}</span>
             </div>
             <div className="flex items-center gap-2">
-              <PhoneCall className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff] shrink-0" />
+              <PhoneCall className="w-4 h-4 text-zinc-800 dark:text-zinc-200 shrink-0" />
               <a
                 href={`tel:${(settings?.phone || "+880 1799-445851").replace(/\s+/g, "")}`}
                 className="hover:text-black dark:hover:text-white transition"
@@ -255,7 +288,7 @@ export default function Footer() {
               </a>
             </div>
             <div className="flex items-center gap-2">
-              <Mail className="w-4 h-4 text-[#0066ff] dark:text-[#00a3ff] shrink-0" />
+              <Mail className="w-4 h-4 text-zinc-800 dark:text-zinc-200 shrink-0" />
               <a
                 href={`mailto:${settings?.email || "support@dhakaiyadripz.com"}`}
                 className="hover:text-black dark:hover:text-white transition"

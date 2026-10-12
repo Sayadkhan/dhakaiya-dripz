@@ -125,7 +125,7 @@ export default function ProductDetailClient({
                 onClick={() => setActiveMedia("catwalk")}
                 className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-lg transition ${
                   activeMedia === "catwalk"
-                    ? "bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white shadow-xs font-black"
+                    ? "bg-black dark:bg-white text-white dark:text-black shadow-xs font-black"
                     : "text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white"
                 }`}
               >
@@ -160,12 +160,12 @@ export default function ProductDetailClient({
             {/* Float Badges */}
             <div className="absolute top-4 left-4 flex flex-col gap-2 z-10">
               {product.isNewDrop && (
-                <span className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-black text-xs uppercase tracking-wider px-3 py-1 rounded-full shadow-lg">
+                <span className="bg-black text-white font-black text-xs uppercase tracking-wider px-3 py-1 rounded-full border border-zinc-800 shadow-lg">
                   New Drop
                 </span>
               )}
               {hasDiscount && (
-                <span className="bg-red-600 text-white font-black text-xs uppercase px-2.5 py-0.5 rounded-full shadow-md">
+                <span className="bg-black text-white font-black text-xs uppercase px-2.5 py-0.5 rounded-full border border-zinc-800 shadow-md">
                   -{discountPercent}%
                 </span>
               )}
@@ -194,7 +194,7 @@ export default function ProductDetailClient({
                   onClick={() => setSelectedImageIndex(idx)}
                   className={`relative aspect-[3/4] rounded-xl overflow-hidden border-2 transition ${
                     selectedImageIndex === idx
-                      ? "border-black dark:border-[#00a3ff] ring-2 ring-black/10 dark:ring-[#00a3ff]/20"
+                      ? "border-black dark:border-white ring-2 ring-black/10 dark:ring-white/20"
                       : "border-zinc-200 dark:border-zinc-800 opacity-70 hover:opacity-100"
                   }`}
                 >
@@ -217,8 +217,16 @@ export default function ProductDetailClient({
             
             {/* Header / Titles */}
             <div className="space-y-2 border-b border-zinc-200 dark:border-zinc-900 pb-5">
+              <div className="flex items-center gap-1.5 text-[11px] font-mono uppercase tracking-wider text-zinc-500 font-bold mb-1">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/uploads/dhakaiya-crest-black.png" alt="DD" className="w-3.5 h-3.5 object-contain block dark:hidden" />
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                <img src="/uploads/dhakaiya-crest-white.png" alt="DD" className="w-3.5 h-3.5 object-contain hidden dark:block" />
+                <span>Dhakaiya Atelier // Drop Archive</span>
+              </div>
+
               <div className="flex items-center gap-2 text-xs flex-wrap">
-                <span className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-[#00a3ff] font-mono font-bold px-2 py-0.5 rounded uppercase">
+                <span className="bg-zinc-100 dark:bg-zinc-900 text-zinc-900 dark:text-zinc-100 font-mono font-bold px-2 py-0.5 rounded uppercase">
                   {product.category}
                 </span>
                 <span className="text-zinc-400 font-mono">•</span>
@@ -271,7 +279,7 @@ export default function ProductDetailClient({
                     onClick={() => setSelectedColor(color.name)}
                     className={`group flex items-center gap-2 p-1.5 rounded-xl border transition ${
                       selectedColor === color.name
-                        ? "border-black dark:border-[#00a3ff] bg-zinc-100 dark:bg-zinc-900 shadow-xs"
+                        ? "border-black dark:border-white bg-zinc-100 dark:bg-zinc-900 shadow-xs"
                         : "border-zinc-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-zinc-400 dark:hover:border-zinc-700"
                     }`}
                   >
@@ -295,7 +303,7 @@ export default function ProductDetailClient({
                 </span>
                 <button
                   onClick={() => setIsSizeGuideOpen(true)}
-                  className="text-xs font-bold text-zinc-900 dark:text-[#00a3ff] hover:underline flex items-center gap-1"
+                  className="text-xs font-bold text-zinc-900 dark:text-white hover:underline flex items-center gap-1"
                 >
                   <Ruler className="w-3.5 h-3.5" /> Size Chart
                 </button>
@@ -313,10 +321,10 @@ export default function ProductDetailClient({
                       onClick={() => setSelectedSize(s.size)}
                       className={`relative py-3 rounded-xl font-mono text-xs font-bold transition flex flex-col items-center justify-center border ${
                         isSelected
-                          ? "border-[#00a3ff] bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white shadow-lg shadow-[#0088ff]/25"
+                          ? "border-black bg-black text-white dark:bg-white dark:text-black dark:border-white shadow-md font-black"
                           : outOfStock
                           ? "border-zinc-200 dark:border-zinc-900 bg-zinc-50 dark:bg-zinc-950 text-zinc-400 dark:text-zinc-600 line-through opacity-40 cursor-not-allowed"
-                          : "border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 hover:border-zinc-400 dark:hover:border-zinc-600 text-zinc-900 dark:text-zinc-200"
+                          : "border-zinc-200 dark:border-zinc-800 bg-zinc-50 dark:bg-zinc-900 hover:border-black dark:hover:border-white text-zinc-900 dark:text-zinc-200"
                       }`}
                     >
                       <span>{s.size}</span>
@@ -346,7 +354,7 @@ export default function ProductDetailClient({
               <button
                 onClick={handleAddToBag}
                 disabled={isOutOfStock}
-                className="w-full bg-gradient-to-r from-[#0066ff] to-[#00a3ff] hover:from-[#0052cc] hover:to-[#0088ff] disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 dark:disabled:text-zinc-600 text-white font-black text-sm uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 shadow-xl shadow-[#0088ff]/25 transition group"
+                className="w-full bg-black hover:bg-zinc-800 disabled:bg-zinc-200 dark:disabled:bg-zinc-800 disabled:text-zinc-400 text-white font-black text-sm uppercase tracking-wider py-4 rounded-xl flex items-center justify-center gap-2 shadow-xl transition group"
               >
                 <ShoppingBag className="w-5 h-5 group-hover:scale-110 transition" />
                 <span>{isOutOfStock ? "Out of Stock" : "Add to Bag (Slide Drawer)"}</span>
@@ -355,7 +363,7 @@ export default function ProductDetailClient({
               <button
                 onClick={handleBuyNow}
                 disabled={isOutOfStock}
-                className="w-full bg-zinc-900 hover:bg-black dark:bg-zinc-900 dark:hover:bg-zinc-800 disabled:opacity-50 text-white border border-zinc-800 font-bold text-sm uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 transition"
+                className="w-full bg-white dark:bg-zinc-950 hover:bg-zinc-100 dark:hover:bg-zinc-900 disabled:opacity-50 text-black dark:text-white border-2 border-black dark:border-white font-black text-sm uppercase tracking-wider py-3.5 rounded-xl flex items-center justify-center gap-2 transition"
               >
                 <span>Instant Cash on Delivery Checkout</span>
                 <ArrowRight className="w-4 h-4" />
@@ -365,19 +373,19 @@ export default function ProductDetailClient({
             {/* Assurances & Shipping Info */}
             <div className="p-4 rounded-2xl bg-zinc-50 dark:bg-zinc-900/40 border border-zinc-200 dark:border-zinc-900 space-y-3 text-xs text-zinc-600 dark:text-zinc-400">
               <div className="flex items-center gap-3">
-                <Truck className="w-4 h-4 text-[#0088ff] dark:text-[#00a3ff] flex-shrink-0" />
+                <Truck className="w-4 h-4 text-black dark:text-white flex-shrink-0" />
                 <div>
                   <strong className="text-zinc-950 dark:text-white">Nationwide COD Shipping:</strong> Inside Dhaka (24-48h, ৳80), Outside Dhaka (48-72h, ৳150).
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <ShieldCheck className="w-4 h-4 text-[#0088ff] dark:text-[#00a3ff] flex-shrink-0" />
+                <ShieldCheck className="w-4 h-4 text-black dark:text-white flex-shrink-0" />
                 <div>
                   <strong className="text-zinc-950 dark:text-white">Pay on Delivery:</strong> Inspect the parcel at your doorstep before handing over cash.
                 </div>
               </div>
               <div className="flex items-center gap-3">
-                <RotateCcw className="w-4 h-4 text-[#0088ff] dark:text-[#00a3ff] flex-shrink-0" />
+                <RotateCcw className="w-4 h-4 text-black dark:text-white flex-shrink-0" />
                 <div>
                   <strong className="text-zinc-950 dark:text-white">7-Day Replacement:</strong> Effortless size exchange if it doesn&apos;t match your drape.
                 </div>
@@ -392,7 +400,7 @@ export default function ProductDetailClient({
               <ul className="space-y-1.5 text-xs text-zinc-600 dark:text-zinc-400">
                 {product.details.map((detail, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <Check className="w-3.5 h-3.5 text-[#0088ff] dark:text-[#00a3ff] mt-0.5 flex-shrink-0" />
+                    <Check className="w-3.5 h-3.5 text-black dark:text-white mt-0.5 flex-shrink-0" />
                     <span>{detail}</span>
                   </li>
                 ))}

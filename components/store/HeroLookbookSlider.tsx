@@ -73,33 +73,44 @@ export default function HeroLookbookSlider() {
 
   if (activeProducts.length === 0) {
     return (
-      <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-zinc-950 via-[#0a0e17] to-zinc-900 shadow-2xl flex flex-col justify-between p-8 text-white select-none">
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-[#0088ff]/20 blur-[90px] rounded-full pointer-events-none" />
+      <div className="relative aspect-[4/5] rounded-3xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-gradient-to-br from-zinc-950 via-zinc-900 to-black shadow-2xl flex flex-col justify-between p-8 text-white select-none">
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-64 h-64 bg-white/5 blur-[90px] rounded-full pointer-events-none" />
 
         {/* Top Badges */}
         <div className="relative z-10 flex items-center justify-between">
-          <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md text-white text-[10px] font-black uppercase px-3 py-1 rounded-full border border-white/10 shadow-lg">
-            <Sparkles className="w-3 h-3 text-[#00a3ff]" />
+          <div className="inline-flex items-center gap-1.5 bg-black/70 backdrop-blur-md text-white text-[10px] font-black uppercase px-3 py-1 rounded-full border border-white/20 shadow-lg">
+            <Sparkles className="w-3 h-3 text-white" />
             <span>SEASON 2026 // ATELIER</span>
           </div>
-          <span className="font-mono text-xs text-[#00a3ff] font-bold">LIMITED</span>
+          <span className="font-mono text-xs text-white/80 font-bold">LIMITED</span>
         </div>
 
         {/* Center Brand Identity */}
         <div className="relative z-10 text-center my-auto space-y-4">
           {customLogoUrl ? (
             <img
-              src={customLogoUrl}
+              src={
+                customLogoUrl.includes("Dhakaiya Dripz-02") || customLogoUrl.includes("dhakaiya-horizontal")
+                  ? "/uploads/dhakaiya-dripz-full-white.png"
+                  : customLogoUrl
+              }
               alt="Dhakaiya Dripz"
-              className="h-20 w-auto max-w-[240px] mx-auto object-contain drop-shadow-[0_4px_20px_rgba(0,163,255,0.4)]"
+              className="h-28 w-auto max-w-[260px] mx-auto object-contain brightness-0 invert drop-shadow-[0_4px_24px_rgba(255,255,255,0.25)]"
             />
           ) : (
-            <div className="text-2xl font-black tracking-tight uppercase">
-              DHAKAIYA <span className="text-[#00a3ff]">DRIPZ</span>
+            <div className="flex flex-col items-center gap-2">
+              <img
+                src="/uploads/dhakaiya-crest-white.png"
+                alt="DD"
+                className="h-16 w-auto drop-shadow-md"
+              />
+              <div className="font-serif-brand text-3xl font-bold tracking-tight text-white">
+                Dhakaiya <span className="italic font-normal">Dripz</span>
+              </div>
             </div>
           )}
           <div className="space-y-1">
-            <div className="text-xs font-mono uppercase tracking-widest text-[#00a3ff] font-bold">
+            <div className="text-xs font-mono uppercase tracking-widest text-zinc-300 font-bold">
               Exclusive Drop Preparation
             </div>
             <p className="text-xs text-zinc-400 max-w-xs mx-auto">
@@ -116,7 +127,7 @@ export default function HeroLookbookSlider() {
           </div>
           <Link
             href="/shop"
-            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white rounded-xl text-xs font-bold shadow-md hover:opacity-90 transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-1.5 bg-white text-black hover:bg-zinc-200 rounded-xl text-xs font-black uppercase shadow-md transition"
           >
             <span>Catalog</span>
             <ArrowRight className="w-3.5 h-3.5" />
@@ -128,7 +139,7 @@ export default function HeroLookbookSlider() {
 
   const currentProduct = activeProducts[currentIndex] || activeProducts[0];
   const lookNumber = String(currentIndex + 1).padStart(2, "0");
-  const imageUrl = currentProduct?.images?.[0] || customLogoUrl || "/uploads/drip-062eabdb-e093-4aef-8-1790770654393-4474.png";
+  const imageUrl = currentProduct?.images?.[0] || "/uploads/dhakaiya-dripz-full.png";
 
   return (
     <div
@@ -161,14 +172,14 @@ export default function HeroLookbookSlider() {
       {/* Top Slider Navigation Header */}
       <div className="absolute top-4 inset-x-4 z-20 flex items-center justify-between">
         {/* Streetwear Badge */}
-        <div className="inline-flex items-center gap-1.5 bg-black/60 backdrop-blur-md text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full border border-white/10 shadow-lg">
-          <Sparkles className="w-3 h-3 text-[#00a3ff]" />
+        <div className="inline-flex items-center gap-1.5 bg-black/70 backdrop-blur-md text-white text-[10px] font-black uppercase px-2.5 py-1 rounded-full border border-white/20 shadow-lg">
+          <Sparkles className="w-3 h-3 text-white" />
           <span>Curated Lookbook</span>
         </div>
 
         {/* Slide Progress Indicator Dots / Bars */}
         {activeProducts.length > 1 && (
-          <div className="flex items-center gap-1.5 bg-black/50 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/10">
+          <div className="flex items-center gap-1.5 bg-black/60 backdrop-blur-md px-2.5 py-1 rounded-full border border-white/20">
             {activeProducts.map((_, idx) => (
               <button
                 key={idx}
@@ -178,7 +189,7 @@ export default function HeroLookbookSlider() {
                 }}
                 className={`h-1.5 rounded-full transition-all duration-300 ${
                   idx === currentIndex
-                    ? "w-6 bg-gradient-to-r from-[#0066ff] to-[#00a3ff]"
+                    ? "w-6 bg-white"
                     : "w-2 bg-white/40 hover:bg-white/70"
                 }`}
                 aria-label={`Go to slide ${idx + 1}`}
@@ -193,14 +204,14 @@ export default function HeroLookbookSlider() {
         <>
           <button
             onClick={handlePrev}
-            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/10"
+            className="absolute left-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/20"
             aria-label="Previous Look"
           >
             <ChevronLeft className="w-5 h-5" />
           </button>
           <button
             onClick={handleNext}
-            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/50 hover:bg-black/80 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/10"
+            className="absolute right-3 top-1/2 -translate-y-1/2 z-20 w-9 h-9 rounded-full bg-black/60 hover:bg-black/90 backdrop-blur-md text-white flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity duration-200 border border-white/20"
             aria-label="Next Look"
           >
             <ChevronRight className="w-5 h-5" />
@@ -209,10 +220,10 @@ export default function HeroLookbookSlider() {
       )}
 
       {/* Floating Product Card (Bottom) */}
-      <div className="absolute bottom-5 inset-x-5 z-20 bg-white/95 dark:bg-zinc-950/90 backdrop-blur-md p-4 rounded-2xl border border-zinc-200/80 dark:border-zinc-800/80 shadow-2xl flex items-center justify-between transition-all duration-300 hover:border-black dark:hover:border-[#00a3ff]">
+      <div className="absolute bottom-5 inset-x-5 z-20 bg-white/95 dark:bg-zinc-950/90 backdrop-blur-md p-4 rounded-2xl border border-zinc-200/90 dark:border-zinc-800 shadow-2xl flex items-center justify-between transition-all duration-300 hover:border-black dark:hover:border-white">
         <div className="min-w-0 pr-3">
           <div className="flex items-center gap-2 mb-1">
-            <span className="bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white text-[9px] font-black uppercase px-1.5 py-0.5 rounded shadow-xs">
+            <span className="bg-black text-white text-[9px] font-black uppercase px-2 py-0.5 rounded shadow-xs">
               LOOK {lookNumber}
             </span>
             <span className="text-[10px] font-mono text-zinc-500 uppercase font-bold truncate">
@@ -229,7 +240,7 @@ export default function HeroLookbookSlider() {
 
         <Link
           href={`/product/${currentProduct.slug}`}
-          className="p-3 bg-zinc-950 dark:bg-gradient-to-r dark:from-[#0066ff] dark:to-[#00a3ff] text-white hover:scale-105 rounded-xl transition shadow-lg shrink-0 flex items-center justify-center"
+          className="p-3 bg-black hover:bg-zinc-800 dark:bg-white dark:hover:bg-zinc-200 text-white dark:text-black hover:scale-105 rounded-xl transition shadow-lg shrink-0 flex items-center justify-center"
           title={`View ${currentProduct.title}`}
           aria-label="View Product"
         >

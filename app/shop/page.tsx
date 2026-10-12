@@ -5,7 +5,7 @@ import ShopCatalogClient from "@/components/store/ShopCatalogClient";
 
 export default function ShopPage() {
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#0088ff] selection:text-white transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-200">
       <Navbar />
       <main className="flex-1">
         <Suspense

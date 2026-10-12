@@ -15,7 +15,7 @@ export default function WishlistPage() {
   const wishlistedProducts = products.filter((p) => wishlistIds.includes(p.id));
 
   return (
-    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-[#0088ff] selection:text-white transition-colors duration-200">
+    <div className="min-h-screen flex flex-col bg-white dark:bg-zinc-950 text-zinc-900 dark:text-white selection:bg-black selection:text-white dark:selection:bg-white dark:selection:text-black transition-colors duration-200">
       <Navbar />
 
       <main className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-16 w-full">
@@ -25,7 +25,7 @@ export default function WishlistPage() {
             Home / Wishlist
           </div>
           <div className="flex items-center gap-3">
-            <Heart className="w-6 h-6 text-red-500 fill-red-500" />
+            <Heart className="w-6 h-6 text-black dark:text-white fill-black dark:fill-white" />
             <h1 className="text-2xl sm:text-4xl font-black uppercase tracking-tight text-zinc-950 dark:text-white">
               Saved Pieces ({wishlistedProducts.length})
             </h1>
@@ -54,7 +54,7 @@ export default function WishlistPage() {
             </div>
             <Link
               href="/shop"
-              className="inline-flex items-center gap-2 bg-gradient-to-r from-[#0066ff] to-[#00a3ff] text-white font-extrabold text-xs uppercase tracking-wider px-6 py-3 rounded-full hover:from-[#0052cc] hover:to-[#0088ff] transition shadow-md shadow-[#0066ff]/20"
+              className="inline-flex items-center gap-2 bg-black hover:bg-zinc-800 text-white font-black text-xs uppercase tracking-wider px-6 py-3 rounded-full transition shadow-md"
             >
               <span>Discover New Drops</span>
               <ArrowRight className="w-4 h-4" />

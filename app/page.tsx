@@ -16,6 +16,9 @@ export default function HomePage() {
       {/* Full-Screen ASOS Editorial Hero Banner (Admin Controlled) */}
       <HeroBanner />
 
+      {/* Edge-to-Edge "The latest drops" Product Section (No Container) */}
+      <FeaturedDropsSection />
+
       {/* ASOS High-Impact Dual Campaign Banner Strip */}
       <section className="bg-black text-white py-4 border-y border-zinc-800">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -66,9 +69,6 @@ export default function HomePage() {
           </div>
         </div>
       </section>
-
-      {/* Featured Drops / Products Section (Dynamic from useProducts) */}
-      <FeaturedDropsSection />
 
       {/* Streetwear Ethos Banner */}
       <section className="relative overflow-hidden py-20 bg-zinc-100/70 dark:bg-zinc-900/30 border-b border-zinc-200 dark:border-zinc-900">

@@ -2,11 +2,14 @@
   "logoUrl": "/uploads/dhakaiya-horizontal-black.png",
   "heroBanner": {
     "imageUrl": "https://images.pexels.com/photos/32864595/pexels-photo-32864595.jpeg",
-    "title": "NEW-SEASON EDIT",
+    "title": "Best Product From Bangladesh",
     "buttonText": "SHOP NOW",
     "linkUrl": "/shop",
     "textColor": "dark",
-    "showOverlay": false
+    "showOverlay": true,
+    "imageFit": "cover",
+    "imagePosition": "top",
+    "bannerHeight": "screen"
   },
   "deliveryInsideDhaka": 90,
   "deliveryOutsideDhaka": 160,
@@ -24,5 +27,5 @@
   "address": "Banani Road 11 Hub, Dhaka, Bangladesh",
   "adminUsername": "admin",
   "adminPassword": "admin",
-  "updatedAt": "2026-10-13T10:27:04.909Z"
+  "updatedAt": "2026-10-13T10:38:58.163Z"
 }

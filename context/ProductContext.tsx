@@ -42,6 +42,9 @@ export interface HeroBannerConfig {
   linkUrl: string;
   textColor?: "dark" | "light";
   showOverlay?: boolean;
+  imageFit?: "cover" | "contain" | "auto";
+  imagePosition?: "top" | "center" | "bottom";
+  bannerHeight?: "screen" | "large" | "medium" | "auto";
 }
 
 export interface StoreSettings {

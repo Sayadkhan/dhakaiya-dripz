@@ -19,23 +19,69 @@ export default function HeroBanner() {
   const showOverlay = banner.showOverlay === true;
   const isDarkText = banner.textColor !== "light";
   const linkTarget = banner.linkUrl || "/shop";
+  const imageFit = banner.imageFit || "cover";
+  // Default focal point to top so models' faces & heads are never cut off
+  const imagePosition = banner.imagePosition || "top";
+  const bannerHeight = banner.bannerHeight || "screen";
+
+  const isAutoHeight = bannerHeight === "auto" || imageFit === "auto";
+
+  // Height container sizing classes
+  let heightContainerClasses = "h-[65vh] sm:h-[75vh] md:h-[82vh] lg:h-[88vh] min-h-[440px] max-h-[960px]";
+  if (isAutoHeight) {
+    heightContainerClasses = "h-auto max-h-[90vh]";
+  } else if (bannerHeight === "large") {
+    heightContainerClasses = "h-[54vh] sm:h-[62vh] md:h-[70vh] min-h-[380px] max-h-[820px]";
+  } else if (bannerHeight === "medium") {
+    heightContainerClasses = "h-[42vh] sm:h-[50vh] md:h-[58vh] min-h-[320px] max-h-[660px]";
+  }
+
+  // Object position for CSS
+  let objectPositionStyle = "center top";
+  if (imagePosition === "center") objectPositionStyle = "center center";
+  if (imagePosition === "bottom") objectPositionStyle = "center bottom";
 
   return (
     <section className="relative w-full overflow-hidden bg-zinc-100 dark:bg-zinc-950 group">
       {/* Full Screen / Full Width Banner Container */}
       <Link
         href={linkTarget}
-        className="relative block w-full aspect-[2.47/1] min-h-[340px] sm:min-h-[460px] md:min-h-[560px] max-h-[85vh] overflow-hidden select-none cursor-pointer"
+        className={`relative block w-full ${heightContainerClasses} overflow-hidden select-none cursor-pointer`}
         aria-label={`${banner.title || "Banner"} - ${banner.buttonText || "Shop Now"}`}
       >
-        {/* Background Banner Image */}
-        <div className="absolute inset-0 w-full h-full">
-          <img
-            src={banner.imageUrl || "/uploads/hero-banner-asos.png"}
-            alt={banner.title || "Hero Banner"}
-            className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.01]"
-          />
-        </div>
+        {/* Background Banner Image Rendering */}
+        {isAutoHeight ? (
+          <div className="w-full flex items-center justify-center bg-zinc-100 dark:bg-zinc-950">
+            <img
+              src={banner.imageUrl || "/uploads/hero-banner-asos.png"}
+              alt={banner.title || "Hero Banner"}
+              className="w-full h-auto max-h-[88vh] object-contain block mx-auto transition-transform duration-700 ease-out group-hover:scale-[1.005]"
+            />
+          </div>
+        ) : imageFit === "contain" ? (
+          <div className="absolute inset-0 w-full h-full bg-zinc-950/80 flex items-center justify-center overflow-hidden">
+            {/* Ambient subtle blurred backdrop to eliminate harsh letterbox */}
+            <img
+              src={banner.imageUrl || "/uploads/hero-banner-asos.png"}
+              alt=""
+              className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-25 scale-110 pointer-events-none"
+            />
+            <img
+              src={banner.imageUrl || "/uploads/hero-banner-asos.png"}
+              alt={banner.title || "Hero Banner"}
+              className="relative z-1 max-w-full max-h-full object-contain mx-auto transition-transform duration-700 ease-out group-hover:scale-[1.005]"
+            />
+          </div>
+        ) : (
+          <div className="absolute inset-0 w-full h-full">
+            <img
+              src={banner.imageUrl || "/uploads/hero-banner-asos.png"}
+              alt={banner.title || "Hero Banner"}
+              style={{ objectPosition: objectPositionStyle }}
+              className="w-full h-full object-cover transition-transform duration-700 ease-out group-hover:scale-[1.01]"
+            />
+          </div>
+        )}
 
         {/* Optional Floating Typography Layout (when showOverlay is enabled) */}
         {showOverlay && (

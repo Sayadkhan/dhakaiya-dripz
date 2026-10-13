@@ -40,6 +40,9 @@ export default function HeroBannerManager({
   const [linkUrl, setLinkUrl] = useState(currentBanner.linkUrl || "/shop");
   const [textColor, setTextColor] = useState<"dark" | "light">(currentBanner.textColor || "dark");
   const [showOverlay, setShowOverlay] = useState<boolean>(currentBanner.showOverlay === true);
+  const [imageFit, setImageFit] = useState<"cover" | "contain" | "auto">(currentBanner.imageFit || "cover");
+  const [imagePosition, setImagePosition] = useState<"top" | "center" | "bottom">(currentBanner.imagePosition || "top");
+  const [bannerHeight, setBannerHeight] = useState<"screen" | "large" | "medium" | "auto">(currentBanner.bannerHeight || "screen");
   const [isUploading, setIsUploading] = useState(false);
   const [isSaving, setIsSaving] = useState(false);
 
@@ -91,6 +94,9 @@ export default function HeroBannerManager({
         linkUrl: linkUrl.trim() || "/shop",
         textColor,
         showOverlay,
+        imageFit,
+        imagePosition,
+        bannerHeight,
       };
 
       await onUpdateSettings({ heroBanner: updatedBanner });
@@ -142,13 +148,31 @@ export default function HeroBannerManager({
           <span className="text-[11px] font-mono font-normal">Full-Screen Display</span>
         </div>
 
-        <div className="relative w-full h-[320px] sm:h-[420px] rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 shadow-lg group">
-          {/* Background image */}
-          <img
-            src={imageUrl || "/uploads/hero-banner-asos.png"}
-            alt="Hero Banner Preview"
-            className="w-full h-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-[1.01]"
-          />
+        <div className={`relative w-full ${bannerHeight === 'auto' ? 'h-auto max-h-[460px]' : bannerHeight === 'medium' ? 'h-[260px] sm:h-[320px]' : bannerHeight === 'large' ? 'h-[300px] sm:h-[380px]' : 'h-[340px] sm:h-[440px]'} rounded-2xl overflow-hidden border border-zinc-200 dark:border-zinc-800 bg-zinc-100 dark:bg-zinc-900 shadow-lg group flex items-center justify-center`}>
+          {/* Background image preview */}
+          {imageFit === 'contain' ? (
+            <div className="absolute inset-0 w-full h-full bg-zinc-950/80 flex items-center justify-center overflow-hidden">
+              <img
+                src={imageUrl || "/uploads/hero-banner-asos.png"}
+                alt=""
+                className="absolute inset-0 w-full h-full object-cover filter blur-3xl opacity-30 scale-110 pointer-events-none"
+              />
+              <img
+                src={imageUrl || "/uploads/hero-banner-asos.png"}
+                alt="Hero Banner Preview"
+                className="relative z-1 max-w-full max-h-full object-contain mx-auto"
+              />
+            </div>
+          ) : (
+            <img
+              src={imageUrl || "/uploads/hero-banner-asos.png"}
+              alt="Hero Banner Preview"
+              style={{
+                objectPosition: imagePosition === 'top' ? 'center top' : imagePosition === 'bottom' ? 'center bottom' : 'center center'
+              }}
+              className={`w-full ${bannerHeight === 'auto' ? 'h-auto max-h-[460px] object-contain' : 'h-full object-cover'} transition-transform duration-700 ease-out group-hover:scale-[1.01]`}
+            />
+          )}
 
           {/* Vignette */}
           {showOverlay && (
@@ -186,7 +210,7 @@ export default function HeroBannerManager({
           ) : (
             <div className="absolute bottom-4 left-4 z-10 pointer-events-none">
               <span className="bg-black/75 backdrop-blur-xs text-white text-[10px] font-mono px-2.5 py-1 rounded-md uppercase tracking-wider">
-                Direct Image Mode (No Text Overlay)
+                Direct Image Mode • Position: {imagePosition.toUpperCase()} • Fit: {imageFit.toUpperCase()}
               </span>
             </div>
           )}
@@ -247,6 +271,155 @@ export default function HeroBannerManager({
                 Reset Default
               </button>
             </div>
+          </div>
+
+          {/* Focal Point / Subject Focus */}
+          <div className="pt-4 border-t border-zinc-100 dark:border-zinc-800 space-y-2">
+            <div className="flex items-center justify-between">
+              <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300">
+                Focal Point / Subject Position
+              </label>
+              <span className="text-[10px] text-zinc-400 font-mono">Keeps heads &amp; faces in view</span>
+            </div>
+            <div className="grid grid-cols-3 gap-2">
+              <button
+                type="button"
+                onClick={() => setImagePosition("top")}
+                className={`h-9 px-2 rounded-xl text-xs font-bold flex flex-col items-center justify-center transition ${
+                  imagePosition === "top"
+                    ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                    : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                }`}
+              >
+                <span>Top Focus</span>
+                <span className="text-[9px] opacity-70 font-normal">Faces / Heads</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setImagePosition("center")}
+                className={`h-9 px-2 rounded-xl text-xs font-bold flex flex-col items-center justify-center transition ${
+                  imagePosition === "center"
+                    ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                    : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                }`}
+              >
+                <span>Center</span>
+                <span className="text-[9px] opacity-70 font-normal">Middle</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setImagePosition("bottom")}
+                className={`h-9 px-2 rounded-xl text-xs font-bold flex flex-col items-center justify-center transition ${
+                  imagePosition === "bottom"
+                    ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                    : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                }`}
+              >
+                <span>Bottom</span>
+                <span className="text-[9px] opacity-70 font-normal">Ground / Feet</span>
+              </button>
+            </div>
+          </div>
+
+          {/* Sizing & Fit Options */}
+          <div className="pt-3 border-t border-zinc-100 dark:border-zinc-800 space-y-3">
+            <div>
+              <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                Image Fit Mode
+              </label>
+              <div className="grid grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => setImageFit("cover")}
+                  className={`h-8 px-2 rounded-xl text-xs font-bold transition ${
+                    imageFit === "cover"
+                      ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                      : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                  }`}
+                >
+                  Cover (Full-bleed)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImageFit("contain")}
+                  className={`h-8 px-2 rounded-xl text-xs font-bold transition ${
+                    imageFit === "contain"
+                      ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                      : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                  }`}
+                >
+                  Contain (100% Uncropped)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setImageFit("auto");
+                    setBannerHeight("auto");
+                  }}
+                  className={`h-8 px-2 rounded-xl text-xs font-bold transition ${
+                    imageFit === "auto"
+                      ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                      : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                  }`}
+                >
+                  Auto / Natural
+                </button>
+              </div>
+            </div>
+
+            {imageFit !== "auto" && (
+              <div>
+                <label className="block text-xs font-bold text-zinc-700 dark:text-zinc-300 mb-1.5">
+                  Banner Height
+                </label>
+                <div className="grid grid-cols-4 gap-1.5">
+                  <button
+                    type="button"
+                    onClick={() => setBannerHeight("screen")}
+                    className={`h-8 px-1.5 rounded-xl text-[11px] font-bold transition ${
+                      bannerHeight === "screen"
+                        ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                    }`}
+                  >
+                    Full Screen
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBannerHeight("large")}
+                    className={`h-8 px-1.5 rounded-xl text-[11px] font-bold transition ${
+                      bannerHeight === "large"
+                        ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                    }`}
+                  >
+                    Cinematic
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBannerHeight("medium")}
+                    className={`h-8 px-1.5 rounded-xl text-[11px] font-bold transition ${
+                      bannerHeight === "medium"
+                        ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                    }`}
+                  >
+                    Compact
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBannerHeight("auto")}
+                    className={`h-8 px-1.5 rounded-xl text-[11px] font-bold transition ${
+                      bannerHeight === "auto"
+                        ? "bg-black text-white dark:bg-white dark:text-black shadow-xs"
+                        : "bg-zinc-100 hover:bg-zinc-200 dark:bg-zinc-800 text-zinc-600 dark:text-zinc-400"
+                    }`}
+                  >
+                    Auto Ratio
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

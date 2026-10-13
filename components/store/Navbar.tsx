@@ -214,8 +214,17 @@ export default function Navbar() {
           onMouseLeave={handleCategoryMouseLeave}
         >
           <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-            <div className="flex items-center space-x-6 sm:space-x-8 overflow-x-auto no-scrollbar py-2.5 sm:py-3 text-xs sm:text-[13px] font-medium tracking-wide whitespace-nowrap text-zinc-300">
-              
+            <div className="flex items-center space-x-5 sm:space-x-7 overflow-x-auto no-scrollbar py-2.5 sm:py-3 text-xs sm:text-[13px] font-medium tracking-wide whitespace-nowrap text-zinc-300">
+              {/* Shop All Direct Link / Button */}
+              <Link
+                href="/shop"
+                onMouseEnter={() => setHoveredCategory(null)}
+                className="bg-white text-black hover:bg-zinc-200 font-black text-xs uppercase tracking-wider px-3.5 py-1 rounded-[2px] transition flex items-center gap-1.5 shrink-0 shadow-xs"
+              >
+                <ShoppingBag className="w-3.5 h-3.5 stroke-[2.5]" />
+                <span>Shop</span>
+              </Link>
+
               <Link
                 href="/shop?filter=new"
                 onMouseEnter={() => setHoveredCategory(null)}
@@ -499,6 +508,18 @@ export default function Navbar() {
             </div>
 
             <div className="flex flex-col space-y-2">
+              <Link
+                href="/shop"
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="px-3 py-2.5 text-sm font-black text-black bg-white hover:bg-zinc-200 rounded-lg flex items-center justify-between transition shadow-xs uppercase tracking-wider"
+              >
+                <span className="flex items-center gap-2">
+                  <ShoppingBag className="w-4 h-4 text-black" />
+                  <span>Shop All Drops</span>
+                </span>
+                <ArrowRight className="w-4 h-4 text-black" />
+              </Link>
+
               <Link
                 href="/shop?filter=new"
                 onClick={() => setIsMobileMenuOpen(false)}

@@ -16,6 +16,7 @@ import {
   Store,
   Layers,
   LogOut,
+  Image as ImageIcon,
 } from "lucide-react";
 import ThemeToggle from "@/components/store/ThemeToggle";
 
@@ -25,6 +26,7 @@ export type AdminTab =
   | "orders"
   | "categories"
   | "attributes"
+  | "banner"
   | "branding";
 
 interface AdminSidebarProps {
@@ -94,6 +96,12 @@ export default function AdminSidebar({
       id: "attributes" as AdminTab,
       label: "Colors & Sizes",
       icon: Palette,
+      badge: null,
+    },
+    {
+      id: "banner" as AdminTab,
+      label: "Hero Banner",
+      icon: ImageIcon,
       badge: null,
     },
     {

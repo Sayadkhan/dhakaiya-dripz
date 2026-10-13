@@ -14,8 +14,18 @@ export interface SocialLinks {
   messenger?: string;
 }
 
+export interface HeroBannerConfig {
+  imageUrl: string;
+  title: string;
+  buttonText: string;
+  linkUrl: string;
+  textColor?: "dark" | "light";
+  showOverlay?: boolean;
+}
+
 export interface StoreSettings {
   logoUrl: string | null;
+  heroBanner?: HeroBannerConfig;
   deliveryInsideDhaka: number;
   deliveryOutsideDhaka: number;
   freeShippingThreshold: number;
@@ -30,6 +40,14 @@ export interface StoreSettings {
 
 const DEFAULT_STORE_SETTINGS: StoreSettings = {
   logoUrl: "/uploads/dhakaiya-horizontal-black.png",
+  heroBanner: {
+    imageUrl: "/uploads/hero-banner-asos.png",
+    title: "NEW-SEASON EDIT",
+    buttonText: "SHOP NOW",
+    linkUrl: "/shop",
+    textColor: "dark",
+    showOverlay: false,
+  },
   deliveryInsideDhaka: 80,
   deliveryOutsideDhaka: 150,
   freeShippingThreshold: 3000,
@@ -55,6 +73,10 @@ export async function GET() {
     const settings: StoreSettings = {
       ...DEFAULT_STORE_SETTINGS,
       ...parsed,
+      heroBanner: {
+        ...DEFAULT_STORE_SETTINGS.heroBanner!,
+        ...(parsed.heroBanner || {}),
+      },
       socialLinks: {
         ...DEFAULT_STORE_SETTINGS.socialLinks,
         ...(parsed.socialLinks || {}),
@@ -84,6 +106,14 @@ export async function POST(request: NextRequest) {
     const updatedSettings: StoreSettings = {
       ...existingSettings,
       ...(body.logoUrl !== undefined ? { logoUrl: body.logoUrl } : {}),
+      ...(body.heroBanner !== undefined
+        ? {
+            heroBanner: {
+              ...(existingSettings.heroBanner || DEFAULT_STORE_SETTINGS.heroBanner!),
+              ...body.heroBanner,
+            },
+          }
+        : {}),
       ...(body.deliveryInsideDhaka !== undefined
         ? { deliveryInsideDhaka: Number(body.deliveryInsideDhaka) }
         : {}),
@@ -106,6 +136,12 @@ export async function POST(request: NextRequest) {
     };
 
     await writeFile(SETTINGS_FILE_PATH, JSON.stringify(updatedSettings, null, 2), "utf-8");
+
+    // Also backup to public/uploads
+    try {
+      const backupPath = path.join(process.cwd(), "public", "uploads", "store_settings.json");
+      await writeFile(backupPath, JSON.stringify(updatedSettings, null, 2), "utf-8");
+    } catch {}
 
     return NextResponse.json({ success: true, settings: updatedSettings });
   } catch (error) {

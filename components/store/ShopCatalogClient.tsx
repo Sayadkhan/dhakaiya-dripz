@@ -16,6 +16,7 @@ export default function ShopCatalogClient() {
 
   // URL state synchronization
   const selectedCategory = searchParams.get("category") || "All";
+  const selectedSub = searchParams.get("sub") || "";
   const selectedGender = searchParams.get("gender") || "ALL";
   const selectedFit = searchParams.get("fit") || "ALL";
   const selectedSize = searchParams.get("size") || "ALL";
@@ -54,6 +55,13 @@ export default function ShopCatalogClient() {
     return products.filter((product) => {
       if (filterParam === "new" && !product.isNewDrop) return false;
       if (selectedCategory !== "All" && product.category.toLowerCase() !== selectedCategory.toLowerCase()) return false;
+      if (selectedSub) {
+        const subLower = selectedSub.toLowerCase();
+        const matchesName = product.title.toLowerCase().includes(subLower);
+        const matchesDesc = product.description.toLowerCase().includes(subLower);
+        const matchesSub = (product as any).subcategory?.toLowerCase()?.includes(subLower);
+        if (!matchesName && !matchesDesc && !matchesSub) return false;
+      }
       if (selectedGender !== "ALL" && product.gender !== selectedGender && product.gender !== "UNISEX") return false;
       if (selectedFit !== "ALL" && product.fit !== selectedFit) return false;
       if (selectedSize !== "ALL") {
@@ -68,10 +76,11 @@ export default function ShopCatalogClient() {
       if (sortBy === "price-desc") return priceB - priceA;
       return 0;
     });
-  }, [products, selectedCategory, selectedGender, selectedFit, selectedSize, sortBy, filterParam]);
+  }, [products, selectedCategory, selectedSub, selectedGender, selectedFit, selectedSize, sortBy, filterParam]);
 
   const activeFiltersCount =
     (selectedCategory !== "All" ? 1 : 0) +
+    (selectedSub ? 1 : 0) +
     (selectedGender !== "ALL" ? 1 : 0) +
     (selectedFit !== "ALL" ? 1 : 0) +
     (selectedSize !== "ALL" ? 1 : 0) +
@@ -222,6 +231,14 @@ export default function ShopCatalogClient() {
               Category: {selectedCategory}
               <button onClick={() => updateQuery("category", "All")}>
                 <X className="w-3 h-3 text-zinc-500 hover:text-black dark:hover:text-white" />
+              </button>
+            </span>
+          )}
+          {selectedSub && (
+            <span className="inline-flex items-center gap-1 bg-sky-50 dark:bg-sky-950/60 border border-sky-200 dark:border-sky-800 text-xs px-2.5 py-1 rounded-full text-sky-700 dark:text-sky-300 font-medium">
+              Style: {selectedSub}
+              <button onClick={() => updateQuery("sub", "")}>
+                <X className="w-3 h-3 text-sky-500 hover:text-black dark:hover:text-white" />
               </button>
             </span>
           )}

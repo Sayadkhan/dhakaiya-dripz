@@ -101,7 +101,7 @@ export default function CategoriesTable({
               <tr>
                 <th className="py-3.5 px-4 w-24">Image</th>
                 <th className="py-3.5 px-4">Category Name</th>
-                <th className="py-3.5 px-4">Slug</th>
+                <th className="py-3.5 px-4">Subcategories (ASOS Menu)</th>
                 <th className="py-3.5 px-4">Description</th>
                 <th className="py-3.5 px-4 text-center">Items Linked</th>
                 <th className="py-3.5 px-4 text-right">Actions</th>
@@ -141,10 +141,43 @@ export default function CategoriesTable({
                           <FolderPlus className="w-4 h-4 text-sky-500 shrink-0" />
                           <span>{cat.name}</span>
                         </div>
+                        <div className="font-mono text-[11px] text-zinc-500 font-normal pl-6">
+                          /{cat.slug}
+                        </div>
                       </td>
 
-                      <td className="py-4 px-4 font-mono text-xs text-zinc-500">
-                        /{cat.slug}
+                      <td className="py-4 px-4 text-xs">
+                        {cat.subcategories && cat.subcategories.length > 0 ? (
+                          <div className="flex flex-wrap items-center gap-1.5 max-w-sm">
+                            <span className="font-mono text-[10px] font-bold uppercase px-2 py-0.5 rounded-full bg-sky-100 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400">
+                              {cat.subcategories.length} subs
+                            </span>
+                            {cat.subcategories.slice(0, 3).map((sub) => (
+                              <span
+                                key={sub.id}
+                                className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-zinc-100 dark:bg-zinc-800 text-zinc-700 dark:text-zinc-300 text-[11px] font-medium border border-zinc-200 dark:border-zinc-700/60"
+                              >
+                                {sub.image && (
+                                  <img
+                                    src={sub.image}
+                                    alt=""
+                                    className="w-3.5 h-3.5 rounded-full object-cover shrink-0"
+                                  />
+                                )}
+                                <span>{sub.name}</span>
+                              </span>
+                            ))}
+                            {cat.subcategories.length > 3 && (
+                              <span className="text-[10px] text-zinc-400 font-mono">
+                                +{cat.subcategories.length - 3} more
+                              </span>
+                            )}
+                          </div>
+                        ) : (
+                          <span className="text-zinc-400 text-xs italic">
+                            No subcategories (Click Edit to add)
+                          </span>
+                        )}
                       </td>
 
                       <td className="py-4 px-4 text-zinc-600 dark:text-zinc-400 text-xs max-w-xs truncate">

@@ -23,5 +23,10 @@ body {
 }
 
 .font-serif-brand {
-  font-family: var(--font-serif-brand), "Playfair Display", "Didot", "Bodoni MT", Georgia, serif;
+  font-family: var(--font-serif-brand), "Bodoni Moda", "Didot", "Bodoni MT", serif;
 }
+
+.font-typewriter {
+  font-family: "Courier New", Courier, monospace;
+}
+

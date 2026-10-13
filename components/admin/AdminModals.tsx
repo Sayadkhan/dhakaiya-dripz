@@ -14,9 +14,10 @@ import {
   Loader2,
   Edit,
   Sparkles,
+  Plus,
 } from "lucide-react";
 import { ProductItem } from "@/lib/mock-data";
-import { CategoryItem } from "@/context/ProductContext";
+import { CategoryItem, SubcategoryItem } from "@/context/ProductContext";
 
 // 1. Delete Product Modal
 interface DeleteProductModalProps {
@@ -79,7 +80,13 @@ export function DeleteProductModal({
 interface AddCategoryModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onSave: (name: string, description: string, image?: string, id?: string) => void;
+  onSave: (
+    name: string,
+    description: string,
+    image?: string,
+    id?: string,
+    subcategories?: SubcategoryItem[]
+  ) => void;
   categoryToEdit?: CategoryItem | null;
 }
 
@@ -93,22 +100,34 @@ export function AddCategoryModal({
   const [catDesc, setCatDesc] = useState("");
   const [catImage, setCatImage] = useState("");
   const [manualUrl, setManualUrl] = useState("");
+  const [subcategories, setSubcategories] = useState<SubcategoryItem[]>([]);
+  const [subName, setSubName] = useState("");
+  const [subDesc, setSubDesc] = useState("");
+  const [subImage, setSubImage] = useState("");
+  const [isAddingSub, setIsAddingSub] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [dragOver, setDragOver] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const subFileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
     if (categoryToEdit) {
       setCatName(categoryToEdit.name || "");
       setCatDesc(categoryToEdit.description || "");
       setCatImage(categoryToEdit.image || "");
+      setSubcategories(categoryToEdit.subcategories ? [...categoryToEdit.subcategories] : []);
       setManualUrl("");
     } else {
       setCatName("");
       setCatDesc("");
       setCatImage("");
+      setSubcategories([]);
       setManualUrl("");
     }
+    setIsAddingSub(false);
+    setSubName("");
+    setSubDesc("");
+    setSubImage("");
   }, [categoryToEdit, isOpen]);
 
   if (!isOpen) return null;
@@ -159,20 +178,87 @@ export function AddCategoryModal({
     }
   };
 
+  const handleSubFileUpload = async (files: FileList | null) => {
+    if (!files || files.length === 0) return;
+    const file = files[0];
+
+    try {
+      const formData = new FormData();
+      formData.append("files", file);
+
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      let data: any = null;
+      try {
+        data = await res.json();
+      } catch {}
+
+      if (res.ok && data?.urls && data.urls.length > 0) {
+        setSubImage(data.urls[0]);
+      } else {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          if (e.target?.result) {
+            setSubImage(e.target.result as string);
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    } catch {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        if (e.target?.result) {
+          setSubImage(e.target.result as string);
+        }
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
   const handleApplyUrl = () => {
     if (!manualUrl.trim()) return;
     setCatImage(manualUrl.trim());
     setManualUrl("");
   };
 
+  const handleAddSubcategory = () => {
+    if (!subName.trim()) return;
+    const newSub: SubcategoryItem = {
+      id: `sub-${Date.now()}-${Math.random().toString(36).substring(2, 6)}`,
+      name: subName.trim(),
+      slug: subName.trim().toLowerCase().replace(/\s+/g, "-"),
+      description: subDesc.trim() || undefined,
+      image: subImage.trim() || undefined,
+    };
+    setSubcategories((prev) => [...prev, newSub]);
+    setSubName("");
+    setSubDesc("");
+    setSubImage("");
+    setIsAddingSub(false);
+  };
+
+  const handleRemoveSubcategory = (subId: string) => {
+    setSubcategories((prev) => prev.filter((s) => s.id !== subId));
+  };
+
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!catName.trim()) return;
-    onSave(catName.trim(), catDesc.trim(), catImage.trim() || undefined, categoryToEdit?.id);
+    onSave(
+      catName.trim(),
+      catDesc.trim(),
+      catImage.trim() || undefined,
+      categoryToEdit?.id,
+      subcategories
+    );
     setCatName("");
     setCatDesc("");
     setCatImage("");
     setManualUrl("");
+    setSubcategories([]);
     onClose();
   };
 
@@ -366,6 +452,160 @@ export function AddCategoryModal({
                 Apply URL
               </button>
             </div>
+          </div>
+
+          {/* SUBCATEGORIES MANAGEMENT SECTION (ASOS STYLE) */}
+          <div className="space-y-3 pt-3 border-t border-zinc-200 dark:border-zinc-800">
+            <div className="flex items-center justify-between">
+              <div>
+                <label className="text-xs font-bold uppercase tracking-wider text-zinc-900 dark:text-white flex items-center gap-1.5">
+                  <Sparkles className="w-4 h-4 text-[#00a3ff]" />
+                  <span>Subcategories (ASOS Mega Menu)</span>
+                </label>
+                <p className="text-[11px] text-zinc-500">
+                  Sub-collections displayed inside the dropdown menu &amp; filters.
+                </p>
+              </div>
+              <button
+                type="button"
+                onClick={() => setIsAddingSub(!isAddingSub)}
+                className="px-2.5 py-1.5 rounded-lg text-xs font-bold bg-sky-50 dark:bg-sky-950/60 text-sky-600 dark:text-sky-400 border border-sky-200 dark:border-sky-800/60 hover:bg-sky-100 transition flex items-center gap-1"
+              >
+                <Plus className="w-3.5 h-3.5" />
+                <span>{isAddingSub ? "Close Form" : "Add Subcategory"}</span>
+              </button>
+            </div>
+
+            {/* Add Subcategory Collapsible Form */}
+            {isAddingSub && (
+              <div className="p-3.5 rounded-2xl bg-zinc-50 dark:bg-zinc-900/70 border border-zinc-200 dark:border-zinc-800 space-y-3 animate-in fade-in">
+                <div className="text-[11px] font-bold uppercase tracking-wider text-zinc-700 dark:text-zinc-300">
+                  New Subcategory Details
+                </div>
+
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                  <div>
+                    <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
+                      Subcategory Name *
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Parachute Cargo, Graphic Tees"
+                      value={subName}
+                      onChange={(e) => setSubName(e.target.value)}
+                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-[#00a3ff]"
+                    />
+                  </div>
+
+                  <div>
+                    <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
+                      Tagline / Style (Optional)
+                    </label>
+                    <input
+                      type="text"
+                      placeholder="e.g. Baggy silhouette, Raw wash"
+                      value={subDesc}
+                      onChange={(e) => setSubDesc(e.target.value)}
+                      className="w-full bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-[#00a3ff]"
+                    />
+                  </div>
+                </div>
+
+                {/* Subcategory Image Upload or URL */}
+                <div>
+                  <label className="block text-[11px] font-bold text-zinc-600 dark:text-zinc-400 mb-1">
+                    Subcategory Visual Image (For ASOS Menu Card)
+                  </label>
+                  <div className="flex items-center gap-2">
+                    {subImage && (
+                      <div className="w-10 h-10 rounded-lg overflow-hidden border border-zinc-300 dark:border-zinc-700 shrink-0">
+                        <img src={subImage} alt="Preview" className="w-full h-full object-cover" />
+                      </div>
+                    )}
+                    <input
+                      type="text"
+                      placeholder="Image URL or upload..."
+                      value={subImage}
+                      onChange={(e) => setSubImage(e.target.value)}
+                      className="flex-1 bg-white dark:bg-zinc-950 border border-zinc-200 dark:border-zinc-800 rounded-xl px-3 py-2 text-xs text-zinc-900 dark:text-white focus:outline-none focus:border-[#00a3ff]"
+                    />
+                    <input
+                      type="file"
+                      ref={subFileInputRef}
+                      accept="image/*"
+                      className="hidden"
+                      onChange={(e) => handleSubFileUpload(e.target.files)}
+                    />
+                    <button
+                      type="button"
+                      onClick={() => subFileInputRef.current?.click()}
+                      className="px-3 py-2 rounded-xl text-xs font-bold bg-zinc-200 dark:bg-zinc-800 hover:bg-zinc-300 dark:hover:bg-zinc-700 text-zinc-800 dark:text-zinc-200 flex items-center gap-1 transition shrink-0"
+                    >
+                      <Upload className="w-3.5 h-3.5" />
+                      <span>Upload</span>
+                    </button>
+                  </div>
+                </div>
+
+                <div className="flex justify-end pt-1">
+                  <button
+                    type="button"
+                    onClick={handleAddSubcategory}
+                    disabled={!subName.trim()}
+                    className="px-4 py-2 rounded-xl text-xs font-bold bg-[#0066ff] hover:bg-[#0052cc] text-white disabled:opacity-40 transition flex items-center gap-1.5"
+                  >
+                    <Plus className="w-3.5 h-3.5" />
+                    <span>Add to List</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* List of Subcategories */}
+            {subcategories.length > 0 ? (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                {subcategories.map((sub) => (
+                  <div
+                    key={sub.id}
+                    className="p-2.5 rounded-xl bg-zinc-50 dark:bg-zinc-900/60 border border-zinc-200 dark:border-zinc-800 flex items-center justify-between gap-2 text-xs"
+                  >
+                    <div className="flex items-center gap-2.5 min-w-0">
+                      {sub.image ? (
+                        <img
+                          src={sub.image}
+                          alt={sub.name}
+                          className="w-9 h-9 rounded-lg object-cover shrink-0 border border-zinc-200 dark:border-zinc-700"
+                        />
+                      ) : (
+                        <div className="w-9 h-9 rounded-lg bg-zinc-200 dark:bg-zinc-800 flex items-center justify-center shrink-0 text-zinc-400">
+                          <ImageIcon className="w-4 h-4" />
+                        </div>
+                      )}
+                      <div className="min-w-0">
+                        <div className="font-bold text-zinc-900 dark:text-white truncate">
+                          {sub.name}
+                        </div>
+                        <div className="text-[10px] text-zinc-500 font-mono truncate">
+                          {sub.description || `/${sub.slug}`}
+                        </div>
+                      </div>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => handleRemoveSubcategory(sub.id)}
+                      className="p-1.5 text-zinc-400 hover:text-red-500 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-800 transition shrink-0"
+                      title="Remove Subcategory"
+                    >
+                      <Trash2 className="w-3.5 h-3.5" />
+                    </button>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="p-3 text-center rounded-xl bg-zinc-50/50 dark:bg-zinc-900/30 border border-dashed border-zinc-200 dark:border-zinc-800 text-[11px] text-zinc-500">
+                No subcategories added yet. Click &quot;Add Subcategory&quot; to build the ASOS mega dropdown menu.
+              </div>
+            )}
           </div>
 
           {/* Modal Action Buttons */}

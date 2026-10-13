@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { useProducts } from "@/context/ProductContext";
 import { OrderItemRecord, ProductItem } from "@/lib/mock-data";
-import { CategoryItem } from "@/context/ProductContext";
+import { CategoryItem, SubcategoryItem } from "@/context/ProductContext";
 import { formatPrice } from "@/lib/utils";
 import AdminSidebar, { AdminTab } from "@/components/admin/AdminSidebar";
 import AdminHeader from "@/components/admin/AdminHeader";
@@ -13,6 +13,7 @@ import OrdersTable from "@/components/admin/OrdersTable";
 import CategoriesTable from "@/components/admin/CategoriesTable";
 import AttributesManager from "@/components/admin/AttributesManager";
 import BrandingManager from "@/components/admin/BrandingManager";
+import HeroBannerManager from "@/components/admin/HeroBannerManager";
 import ProductFormModal from "@/components/admin/ProductFormModal";
 import AdminLoginView from "@/components/admin/AdminLoginView";
 import {
@@ -165,7 +166,8 @@ export default function AdminPage() {
     name: string,
     description: string,
     image?: string,
-    id?: string
+    id?: string,
+    subcategories?: SubcategoryItem[]
   ) => {
     if (id) {
       const existing = categories.find((c) => c.id === id);
@@ -175,11 +177,12 @@ export default function AdminPage() {
           name,
           description,
           image,
+          subcategories: subcategories !== undefined ? subcategories : existing.subcategories,
         });
         triggerToast(`Category "${name}" updated successfully!`);
       }
     } else {
-      addCategory(name, description, image);
+      addCategory(name, description, image, subcategories);
       triggerToast(`Category "${name}" created successfully!`);
     }
   };
@@ -367,7 +370,16 @@ export default function AdminPage() {
             />
           )}
 
-          {/* TAB 6: STORE SETTINGS, DELIVERY & BRANDING */}
+          {/* TAB 6: HERO BANNER MANAGEMENT */}
+          {activeTab === "banner" && (
+            <HeroBannerManager
+              settings={settings}
+              onUpdateSettings={updateSettings}
+              onTriggerToast={triggerToast}
+            />
+          )}
+
+          {/* TAB 7: STORE SETTINGS, DELIVERY & BRANDING */}
           {activeTab === "branding" && (
             <BrandingManager
               customLogoUrl={customLogoUrl}

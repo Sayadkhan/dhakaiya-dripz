@@ -24,10 +24,9 @@ export default function CategoryGridSection() {
         </div>
         <Link
           href="/shop"
-          className="text-xs font-bold text-zinc-600 dark:text-zinc-400 hover:text-black dark:hover:text-white flex items-center gap-1.5 transition"
+          className="border-2 border-black dark:border-white px-6 py-2.5 text-xs font-black uppercase tracking-widest text-black dark:text-white hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black transition shrink-0 mr-12 sm:mr-0"
         >
-          <span>View All Categories</span>
-          <ArrowRight className="w-3.5 h-3.5" />
+          View All
         </Link>
       </div>
 

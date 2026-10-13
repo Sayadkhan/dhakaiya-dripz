@@ -3,12 +3,21 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 import { INITIAL_PRODUCTS, ProductItem } from "@/lib/mock-data";
 
+export interface SubcategoryItem {
+  id: string;
+  name: string;
+  slug: string;
+  description?: string;
+  image?: string;
+}
+
 export interface CategoryItem {
   id: string;
   name: string;
   slug: string;
   description?: string;
   image?: string;
+  subcategories?: SubcategoryItem[];
 }
 
 export interface ColorItem {
@@ -26,8 +35,18 @@ export interface SocialLinks {
   messenger?: string;
 }
 
+export interface HeroBannerConfig {
+  imageUrl: string;
+  title: string;
+  buttonText: string;
+  linkUrl: string;
+  textColor?: "dark" | "light";
+  showOverlay?: boolean;
+}
+
 export interface StoreSettings {
   logoUrl: string | null;
+  heroBanner?: HeroBannerConfig;
   deliveryInsideDhaka: number;
   deliveryOutsideDhaka: number;
   freeShippingThreshold: number;
@@ -42,6 +61,14 @@ export interface StoreSettings {
 
 export const DEFAULT_STORE_SETTINGS: StoreSettings = {
   logoUrl: "/uploads/dhakaiya-horizontal-black.png",
+  heroBanner: {
+    imageUrl: "/uploads/hero-banner-asos.png",
+    title: "NEW-SEASON EDIT",
+    buttonText: "SHOP NOW",
+    linkUrl: "/shop",
+    textColor: "dark",
+    showOverlay: false,
+  },
   deliveryInsideDhaka: 80,
   deliveryOutsideDhaka: 150,
   freeShippingThreshold: 3000,
@@ -74,7 +101,7 @@ interface ProductContextType {
   updateProduct: (product: ProductItem) => void;
   deleteProduct: (id: string) => void;
   updateStock: (productId: string, size: string, delta: number) => void;
-  addCategory: (name: string, description?: string, image?: string) => void;
+  addCategory: (name: string, description?: string, image?: string, subcategories?: SubcategoryItem[]) => void;
   updateCategory: (category: CategoryItem) => void;
   deleteCategory: (id: string) => void;
   addColor: (name: string, hex: string) => void;
@@ -88,38 +115,7 @@ interface ProductContextType {
   isLoaded: boolean;
 }
 
-const DEFAULT_CATEGORIES: CategoryItem[] = [
-  {
-    id: "cat-1",
-    name: "Pants",
-    slug: "Pants",
-    description: "Tactical twill trousers & parachute cargos",
-  },
-  {
-    id: "cat-2",
-    name: "Oversized Tees",
-    slug: "Oversized-Tees",
-    description: "Heavyweight 260GSM combed boxy tees",
-  },
-  {
-    id: "cat-3",
-    name: "Shirts",
-    slug: "Shirts",
-    description: "Raw-edge Cuban camp collar shirts",
-  },
-  {
-    id: "cat-4",
-    name: "Jackets & Hoodies",
-    slug: "Jackets-&-Hoodies",
-    description: "Distressed acid-wash French Terry",
-  },
-  {
-    id: "cat-5",
-    name: "Accessories",
-    slug: "Accessories",
-    description: "Tactical cross-body rigs & belts",
-  },
-];
+const DEFAULT_CATEGORIES: CategoryItem[] = [];
 
 const DEFAULT_COLORS: ColorItem[] = [
   { name: "Pitch Black", hex: "#0A0E17" },
@@ -180,16 +176,25 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
 
       const savedCategories = localStorage.getItem("dhakaiya_dyn_categories");
       if (savedCategories) {
-        const parsed: CategoryItem[] = JSON.parse(savedCategories);
-        // Cleanse legacy unsplash images from categories so user has clean slate
-        const cleansed = parsed.map((cat) => {
-          if (cat.image && cat.image.includes("images.unsplash.com/photo-")) {
-            return { ...cat, image: undefined };
-          }
-          return cat;
-        });
-        setCategories(cleansed);
-        localStorage.setItem("dhakaiya_dyn_categories", JSON.stringify(cleansed));
+        try {
+          const parsed: CategoryItem[] = JSON.parse(savedCategories);
+          const cleansed = parsed.map((cat) => {
+            const isDeletedImg = cat.image && (cat.image.includes("unsplash.com") || cat.image.includes("drip-") || cat.image.includes("accessories_lookbook"));
+            return {
+              ...cat,
+              image: isDeletedImg ? undefined : cat.image,
+              subcategories: (cat.subcategories || []).map((sub) => ({
+                ...sub,
+                image: sub.image && (sub.image.includes("unsplash.com") || sub.image.includes("drip-") || sub.image.includes("accessories_lookbook")) ? undefined : sub.image,
+              })),
+            };
+          });
+          setCategories(cleansed);
+        } catch {
+          setCategories([]);
+        }
+      } else {
+        setCategories([]);
       }
 
       const savedColors = localStorage.getItem("dhakaiya_dyn_colors");
@@ -205,6 +210,10 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
           setSettings((prev) => ({
             ...prev,
             ...parsed,
+            heroBanner: {
+              ...(prev.heroBanner || DEFAULT_STORE_SETTINGS.heroBanner!),
+              ...(parsed.heroBanner || {}),
+            },
             socialLinks: { ...prev.socialLinks, ...(parsed.socialLinks || {}) },
           }));
         } catch {}
@@ -271,6 +280,19 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       })
       .catch((err) => {
         console.warn("Failed to fetch server products:", err);
+      });
+
+    // Also sync categories from server storage
+    fetch("/api/categories")
+      .then((res) => res.json())
+      .then((data) => {
+        if (data?.success && Array.isArray(data.categories) && data.categories.length > 0) {
+          setCategories(data.categories);
+          localStorage.setItem("dhakaiya_dyn_categories", JSON.stringify(data.categories));
+        }
+      })
+      .catch((err) => {
+        console.warn("Failed to fetch server categories:", err);
       });
   }, []);
 
@@ -364,7 +386,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
     );
   };
 
-  const addCategory = (name: string, description?: string, image?: string) => {
+  const addCategory = (name: string, description?: string, image?: string, subcategories?: SubcategoryItem[]) => {
     const slug = name.trim().toLowerCase().replace(/\s+/g, "-");
     const newCat: CategoryItem = {
       id: `cat-${Date.now()}`,
@@ -372,6 +394,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       slug,
       description,
       image,
+      subcategories: subcategories || [],
     };
     setCategories((prev) => {
       const next = [...prev, newCat];
@@ -381,15 +404,17 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       return next;
     });
 
-    // Also sync to PostgreSQL database
+    // Also sync to server storage
     fetch("/api/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
+        id: newCat.id,
         name: newCat.name,
         slug: newCat.slug,
         description: newCat.description,
         image: newCat.image,
+        subcategories: newCat.subcategories,
       }),
     }).catch(() => {});
   };
@@ -403,7 +428,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
       return next;
     });
 
-    // Also sync to PostgreSQL database
+    // Also sync to server storage
     fetch("/api/categories", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
@@ -413,6 +438,7 @@ export function ProductProvider({ children }: { children: React.ReactNode }) {
         slug: updated.slug,
         description: updated.description,
         image: updated.image,
+        subcategories: updated.subcategories,
       }),
     }).catch(() => {});
   };

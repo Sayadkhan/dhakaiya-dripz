@@ -1,1 +1,228 @@
-[]
+[
+  {
+    "id": "dd-prod-001",
+    "title": "Dhakaiya Dripz 320 GSM Acid Wash Drop-Shoulder Tee",
+    "slug": "acid-wash-drop-shoulder-tee",
+    "productCode": "DD-TEE-001",
+    "tagline": "Heavy combed cotton vintage mineral wash silhouette.",
+    "description": "Crafted from ultra-heavyweight 320 GSM 100% combed cotton, this drop-shoulder boxy tee features an authentic acid mineral wash treatment. Engineered with a tight ribbed collar and reinforced flatlock stitching for the ultimate oversized streetwear drape.",
+    "basePrice": 1850,
+    "salePrice": 1650,
+    "gender": "UNISEX",
+    "category": "Oversized Tees",
+    "fit": "OVERSIZED",
+    "isNewDrop": true,
+    "isFeatured": true,
+    "stockCount": 60,
+    "images": [
+      "/uploads/prod-acid-wash-tee-1.jpg",
+      "/uploads/prod-acid-wash-tee-2.jpg"
+    ],
+    "sizes": [
+      { "size": "S", "stock": 12 },
+      { "size": "M", "stock": 18 },
+      { "size": "L", "stock": 20 },
+      { "size": "XL", "stock": 10 }
+    ],
+    "colors": [
+      { "name": "Mineral Charcoal", "hex": "#2B2D2F" },
+      { "name": "Pitch Black", "hex": "#0A0E17" }
+    ],
+    "details": [
+      "320 GSM 100% heavy combed cotton",
+      "Hand-finished vintage mineral acid wash",
+      "Drop-shoulder structured boxy drape",
+      "Thick 1.25-inch high-density ribbed collar",
+      "Pre-shrunk fabric to retain shape",
+      "Crafted & finished in Dhaka, Bangladesh"
+    ]
+  },
+  {
+    "id": "dd-prod-002",
+    "title": "Dhakaiya Dripz Tactical Bungee Parachute Cargo Pants",
+    "slug": "tactical-bungee-parachute-cargo",
+    "productCode": "DD-PNT-002",
+    "tagline": "Architectural parachute silhouette with adjustable ankle toggles.",
+    "description": "Engineered from high-density tactical nylon ripstop, these wide-leg parachute pants feature articulated knee darts, dual gusseted 3D cargo pockets, and bungee cord cinch stoppers at both the waist and hems for an instantly adjustable silhouette.",
+    "basePrice": 2650,
+    "salePrice": 2450,
+    "gender": "UNISEX",
+    "category": "Pants & Cargos",
+    "fit": "OVERSIZED",
+    "isNewDrop": true,
+    "isFeatured": true,
+    "stockCount": 56,
+    "images": [
+      "/uploads/prod-parachute-cargo-1.jpg",
+      "/uploads/prod-parachute-cargo-2.jpg"
+    ],
+    "sizes": [
+      { "size": "28", "stock": 8 },
+      { "size": "30", "stock": 16 },
+      { "size": "32", "stock": 18 },
+      { "size": "34", "stock": 10 },
+      { "size": "36", "stock": 4 }
+    ],
+    "colors": [
+      { "name": "Pitch Black", "hex": "#0A0E17" },
+      { "name": "Battleship Grey", "hex": "#4A4D4F" }
+    ],
+    "details": [
+      "High-density weather-resistant nylon ripstop",
+      "Dual 3D bellows cargo utility pockets with storm flaps",
+      "Concealed bungee cord hem cinch stoppers",
+      "Articulated knee pleats for ergonomic movement",
+      "Reinforced stress-point bar-tacking"
+    ]
+  },
+  {
+    "id": "dd-prod-003",
+    "title": "Dhakaiya Dripz Heavyweight 480 GSM Boxy Hooded Sweatshirt",
+    "slug": "heavyweight-boxy-hooded-sweatshirt",
+    "productCode": "DD-HOD-003",
+    "tagline": "Ultra-dense double-faced French terry with seamless hood drape.",
+    "description": "Built with custom 480 GSM double-faced diagonal loop French terry, this hoodie delivers an imposing boxy drape with zero shoulder seams, double-lined crossover hood, hidden side seam pockets, and heavyweight 2x2 ribbed hems.",
+    "basePrice": 3200,
+    "salePrice": 2950,
+    "gender": "UNISEX",
+    "category": "Hoodies & Outerwear",
+    "fit": "OVERSIZED",
+    "isNewDrop": true,
+    "isFeatured": true,
+    "stockCount": 48,
+    "images": [
+      "/uploads/prod-boxy-hoodie-1.jpg",
+      "/uploads/prod-boxy-hoodie-2.jpg"
+    ],
+    "sizes": [
+      { "size": "S", "stock": 10 },
+      { "size": "M", "stock": 16 },
+      { "size": "L", "stock": 14 },
+      { "size": "XL", "stock": 8 }
+    ],
+    "colors": [
+      { "name": "Pitch Black", "hex": "#0A0E17" },
+      { "name": "Chalk Off-White", "hex": "#F4F3EF" }
+    ],
+    "details": [
+      "480 GSM heavy diagonal loop French terry",
+      "Double-layer structured crossover hood (no drawstrings)",
+      "Seamless drop-shoulder contour",
+      "Concealed kangaroo slash pockets",
+      "High-stretch 500 GSM 2x2 ribbed cuffs & hem"
+    ]
+  },
+  {
+    "id": "dd-prod-004",
+    "title": "Dhakaiya Dripz Relaxed Pleated Wide-Leg Twill Trousers",
+    "slug": "relaxed-pleated-wide-leg-twill-trousers",
+    "productCode": "DD-PNT-004",
+    "tagline": "Tailored streetwear hybrid in heavy garment-dyed cotton twill.",
+    "description": "Merging Savile Row tailoring with contemporary Dhaka streetwear culture. Features double front knife pleats, a wide fluid drape through the leg, welt back pockets, and an internal drawstring waist hidden inside a structured waistband.",
+    "basePrice": 2550,
+    "salePrice": 2350,
+    "gender": "UNISEX",
+    "category": "Pants & Cargos",
+    "fit": "RELAXED",
+    "isNewDrop": false,
+    "isFeatured": true,
+    "stockCount": 52,
+    "images": [
+      "/uploads/prod-twill-trouser-1.jpg",
+      "/uploads/prod-twill-trouser-2.jpg"
+    ],
+    "sizes": [
+      { "size": "28", "stock": 8 },
+      { "size": "30", "stock": 14 },
+      { "size": "32", "stock": 16 },
+      { "size": "34", "stock": 10 },
+      { "size": "36", "stock": 4 }
+    ],
+    "colors": [
+      { "name": "Mineral Charcoal", "hex": "#2B2D2F" },
+      { "name": "Ecru Linen", "hex": "#E3DAC9" }
+    ],
+    "details": [
+      "340 GSM heavy combed cotton twill",
+      "Double forward knife pleats for fluid drape",
+      "Concealed YKK metal zip fly and horn button closure",
+      "Dual side slant pockets and rear welt pockets",
+      "Straight wide-leg cut designed for stacked sneakers"
+    ]
+  },
+  {
+    "id": "dd-prod-005",
+    "title": "Dhakaiya Dripz Raw-Hem Drop-Shoulder Heavy Tee",
+    "slug": "raw-hem-drop-shoulder-heavy-tee",
+    "productCode": "DD-TEE-005",
+    "tagline": "Deconstructed distressed finish in 280 GSM single jersey.",
+    "description": "Designed with an edgy raw-cut deconstructed hemline and subtle distressed edge grinding. Made from breathable 280 GSM premium combed cotton with an exaggerated drop-shoulder and wide boxy torso.",
+    "basePrice": 1750,
+    "salePrice": 1550,
+    "gender": "UNISEX",
+    "category": "Oversized Tees",
+    "fit": "OVERSIZED",
+    "isNewDrop": true,
+    "isFeatured": true,
+    "stockCount": 64,
+    "images": [
+      "/uploads/prod-raw-hem-tee-1.jpg",
+      "/uploads/prod-raw-hem-tee-2.jpg"
+    ],
+    "sizes": [
+      { "size": "S", "stock": 14 },
+      { "size": "M", "stock": 20 },
+      { "size": "L", "stock": 20 },
+      { "size": "XL", "stock": 10 }
+    ],
+    "colors": [
+      { "name": "Chalk Off-White", "hex": "#F4F3EF" },
+      { "name": "Pitch Black", "hex": "#0A0E17" }
+    ],
+    "details": [
+      "280 GSM 100% premium combed single jersey",
+      "Laser raw-cut lower hem with lock-stitch unravel prevention",
+      "Distressed sleeve cuffs and vintage enzyme wash",
+      "Oversized drop-shoulder streetwear fit",
+      "Tonal embroidered DHAKAIYA mini chest insignia"
+    ]
+  },
+  {
+    "id": "dd-prod-006",
+    "title": "Dhakaiya Dripz Heavy Denim Carpenter Utility Pants",
+    "slug": "heavy-denim-carpenter-utility-pants",
+    "productCode": "DD-DEN-006",
+    "tagline": "13.5 oz raw selvedge-feel washed denim with hammer loop details.",
+    "description": "Heavy-duty 13.5 oz cotton denim washed down to a soft vintage hand feel. Features authentic workwear details including an authentic side hammer loop, double tool utility pockets, triple-needle contrast stitching, and heavy antique brass hardware.",
+    "basePrice": 2850,
+    "salePrice": 2650,
+    "gender": "UNISEX",
+    "category": "Pants & Cargos",
+    "fit": "RELAXED",
+    "isNewDrop": false,
+    "isFeatured": true,
+    "stockCount": 45,
+    "images": [
+      "/uploads/prod-carpenter-denim-1.jpg",
+      "/uploads/prod-carpenter-denim-2.jpg"
+    ],
+    "sizes": [
+      { "size": "28", "stock": 6 },
+      { "size": "30", "stock": 14 },
+      { "size": "32", "stock": 15 },
+      { "size": "34", "stock": 8 },
+      { "size": "36", "stock": 2 }
+    ],
+    "colors": [
+      { "name": "Washed Sage", "hex": "#7D8C7C" },
+      { "name": "Cement Grey", "hex": "#7E827A" }
+    ],
+    "details": [
+      "13.5 oz heavyweight 100% cotton denim",
+      "Authentic left leg hammer loop & dual ruler pockets",
+      "Heavy triple-needle flat-felled seam construction",
+      "Custom embossed Dhakaiya Dripz antique brass shank buttons",
+      "Relaxed straight cut with comfortable thigh room"
+    ]
+  }
+]

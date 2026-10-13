@@ -8,7 +8,7 @@ export interface ProductItem {
   basePrice: number;
   salePrice?: number;
   gender: "UNISEX" | "MEN" | "WOMEN";
-  category: "Pants" | "Shirts" | "Oversized Tees" | "Jackets & Hoodies" | "Accessories";
+  category: "Pants" | "Shirts" | "Oversized Tees" | "Jackets & Hoodies" | "Accessories" | "Pants & Cargos" | "Hoodies & Outerwear" | string;
   fit: "OVERSIZED" | "RELAXED" | "REGULAR" | "TAILORED";
   isNewDrop: boolean;
   isFeatured: boolean;

@@ -6,52 +6,6 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "@/context/ProductContext";
 import { formatPrice } from "@/lib/utils";
 
-// Curated default editorial streetwear drops matching ASOS aesthetics when no products exist yet
-const DEFAULT_EDITORIAL_DROPS = [
-  {
-    id: "drop-1",
-    title: "Oversized Heavyweight 320 GSM Acid Wash Drop-Shoulder Tee in Washed Charcoal",
-    price: 1850,
-    slug: "oversized-heavyweight-acid-wash-tee",
-    imageUrl: "https://images.pexels.com/photos/1018911/pexels-photo-1018911.jpeg",
-  },
-  {
-    id: "drop-2",
-    title: "Architectural Wide-Leg Parachute Pants in Vintage Washed Graphite with Bungee Cinch",
-    price: 2650,
-    slug: "architectural-wide-leg-parachute-pants",
-    imageUrl: "https://images.pexels.com/photos/157675/fashion-men-s-individuality-black-and-white-157675.jpeg",
-  },
-  {
-    id: "drop-3",
-    title: "ASOS Style High-Neck Slash Shoulder Drape Maxi Silhouette in Raw Black Combed Cotton",
-    price: 2450,
-    slug: "high-neck-slash-shoulder-maxi-silhouette",
-    imageUrl: "https://images.pexels.com/photos/1926769/pexels-photo-1926769.jpeg",
-  },
-  {
-    id: "drop-4",
-    title: "Backless Waterfall Sleeve Minimalist Streetwear Ruched Mini Silhouette in Solid Black",
-    price: 2250,
-    slug: "backless-waterfall-sleeve-ruched-silhouette",
-    imageUrl: "https://images.pexels.com/photos/2065200/pexels-photo-2065200.jpeg",
-  },
-  {
-    id: "drop-5",
-    title: "Heavyweight Boxy Double-Layered Hooded Sweatshirt with Drop-Shoulder in Onyx",
-    price: 3200,
-    slug: "heavyweight-boxy-double-layered-hoodie",
-    imageUrl: "https://images.pexels.com/photos/32864595/pexels-photo-32864595.jpeg",
-  },
-  {
-    id: "drop-6",
-    title: "Multi-Pocket Tactical Utility Cargo Trousers in Military Ecru Washed Twill",
-    price: 2850,
-    slug: "tactical-utility-cargo-trousers",
-    imageUrl: "https://images.pexels.com/photos/2896840/pexels-photo-2896840.jpeg",
-  },
-];
-
 export default function FeaturedDropsSection() {
   const { products, isLoaded } = useProducts();
   const sliderRef = useRef<HTMLDivElement>(null);
@@ -60,17 +14,17 @@ export default function FeaturedDropsSection() {
   const featured = products.filter((p) => p.isFeatured);
   const activeProducts = featured.length > 0 ? featured : products;
 
-  // If store has products, format them; otherwise use curated ASOS editorial defaults
-  const items =
-    activeProducts.length > 0
-      ? activeProducts.map((p) => ({
-          id: p.id,
-          title: p.title,
-          price: p.salePrice ?? p.basePrice,
-          slug: p.slug || p.id,
-          imageUrl: p.images[0] || "/uploads/hero-banner-asos.png",
-        }))
-      : DEFAULT_EDITORIAL_DROPS;
+  if (activeProducts.length === 0) {
+    return null;
+  }
+
+  const items = activeProducts.map((p) => ({
+    id: p.id,
+    title: p.title,
+    price: p.salePrice ?? p.basePrice,
+    slug: p.slug || p.id,
+    imageUrl: p.images[0] || "/uploads/hero-banner-asos.png",
+  }));
 
   const scroll = (direction: "left" | "right") => {
     if (!sliderRef.current) return;
